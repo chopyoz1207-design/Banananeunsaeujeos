@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SFE – School Facilities Equipment</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #3B5BFA;
+    --blue-light: #6B8EFF;
+    --orange: #FF6B35;
+    --yellow: #FFD43B;
+    --dark: #0A0A14;
+    --mid: #1A1A2E;
+    --gray: #6B7280;
+    --light: #F8F9FF;
+    --card: #FFFFFF;
+    --border: #E5E7F0;
+    --risk-high: #EF4444;
+    --risk-mid: #F59E0B;
+    --risk-low: #10B981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ── LANDING ── */
+  #landing {
+    min-height: 100vh;
+    background: var(--dark);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .land-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-box {
+    width: 40px; height: 40px; background: var(--blue);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700; font-size: 13px; color: #fff;
+  }
+  .logo-text { font-size: 18px; font-weight: 700; color: #fff; }
+  .logo-sub { font-size: 10px; color: var(--gray); letter-spacing: 2px; margin-top: 2px; }
+
+  .land-nav-links { display: flex; gap: 32px; }
+  .land-nav-links a {
+    color: rgba(255,255,255,0.6); text-decoration: none;
+    font-size: 14px; transition: color .2s;
+    cursor: pointer;
+  }
+  .land-nav-links a:hover { color: #fff; }
+
+  .btn-primary {
+    background: var(--blue); color: #fff;
+    border: none; padding: 12px 28px; border-radius: 8px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all .2s;
+  }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
+
+  .land-hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 80px 48px;
+    gap: 80px;
+  }
+
+  .hero-left { flex: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(59,91,250,0.15); border: 1px solid rgba(59,91,250,0.3);
+    border-radius: 100px; padding: 6px 16px;
+    color: var(--blue-light); font-size: 12px; font-weight: 500;
+    margin-bottom: 32px; letter-spacing: 1px;
+  }
+  .pulse { width: 6px; height: 6px; background: var(--blue-light); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
+
+  .hero-title {
+    font-size: 62px; font-weight: 900; line-height: 1.1;
+    color: #fff; margin-bottom: 24px;
+  }
+  .hero-title .accent { color: var(--blue-light); }
+  .hero-title .line2 { color: rgba(255,255,255,0.4); font-size: 44px; }
+
+  .hero-desc {
+    color: rgba(255,255,255,0.5); font-size: 16px; line-height: 1.8;
+    margin-bottom: 48px; max-width: 480px;
+  }
+
+  .hero-actions { display: flex; gap: 16px; align-items: center; }
+  .btn-outline {
+    background: transparent; color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.2); padding: 12px 28px;
+    border-radius: 8px; font-size: 14px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif; transition: all .2s;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+  .hero-right { flex: 1; }
+  .hero-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 24px;
+    transition: all .3s;
+  }
+  .stat-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(59,91,250,0.3); }
+  .stat-num { font-size: 36px; font-weight: 900; color: #fff; font-family: 'Space Mono', monospace; }
+  .stat-num .unit { font-size: 16px; color: var(--blue-light); }
+  .stat-label { color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 8px; }
+  .stat-card.highlight { background: rgba(59,91,250,0.15); border-color: rgba(59,91,250,0.4); }
+
+  .land-problems {
+    padding: 80px 48px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+  }
+  .section-label {
+    font-size: 11px; letter-spacing: 3px; color: var(--blue-light);
+    font-family: 'Space Mono', monospace; margin-bottom: 16px;
+  }
+  .section-title { font-size: 36px; font-weight: 900; color: #fff; margin-bottom: 48px; }
+
+  .problems-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  .prob-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 32px;
+  }
+  .prob-num { font-size: 48px; font-weight: 900; color: rgba(255,255,255,0.05); font-family: 'Space Mono', monospace; margin-bottom: -8px; }
+  .prob-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+  .prob-desc { color: rgba(255,255,255,0.45); font-size: 14px; line-height: 1.7; }
+
+  /* ── APP SHELL ── */
+  #app { display: none; min-height: 100vh; }
+
+  .app-layout { display: flex; }
+  .sidebar {
+    width: 240px; min-height: 100vh; background: var(--dark);
+    padding: 24px 0; position: fixed; left: 0; top: 0;
+    display: flex; flex-direction: column;
+  }
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 24px;
+  }
+  .sidebar-logo .logo-box { width: 32px; height: 32px; font-size: 10px; }
+  .sidebar-logo .logo-text { font-size: 16px; color: #fff; }
+
+  .nav-section { padding: 0 12px; margin-bottom: 8px; }
+  .nav-section-label {
+    font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 2px;
+    padding: 0 8px; margin-bottom: 4px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; border-radius: 8px;
+    color: rgba(255,255,255,0.5); font-size: 14px;
+    cursor: pointer; transition: all .2s; margin-bottom: 2px;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { background: rgba(59,91,250,0.2); color: var(--blue-light); }
+  .nav-icon { width: 18px; text-align: center; font-size: 16px; }
+
+  .main-content {
+    margin-left: 240px; flex: 1; padding: 32px;
+    min-height: 100vh;
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── DASHBOARD ── */
+  .top-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .page-title { font-size: 24px; font-weight: 700; }
+  .page-sub { font-size: 14px; color: var(--gray); margin-top: 2px; }
+  .date-badge {
+    background: #fff; border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 8px; font-size: 13px; color: var(--gray);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 28px; }
+  .kpi-card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+    display: flex; align-items: center; gap: 16px;
+    transition: all .2s;
+  }
+  .kpi-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
+  .kpi-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .kpi-body { flex: 1; }
+  .kpi-num { font-size: 28px; font-weight: 900; font-family: 'Space Mono', monospace; }
+  .kpi-label { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .kpi-change { font-size: 11px; font-weight: 600; margin-top: 4px; }
+  .up { color: var(--risk-high); }
+  .down { color: var(--risk-low); }
+
+  .dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+  }
+  .card-title { font-size: 15px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+  .card-title a { font-size: 12px; color: var(--blue); cursor: pointer; font-weight: 500; }
+
+  /* Risk bars */
+  .risk-list { display: flex; flex-direction: column; gap: 14px; }
+  .risk-item { display: flex; align-items: center; gap: 12px; }
+  .risk-name { width: 120px; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .risk-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .risk-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
+  .risk-pct { width: 36px; text-align: right; font-size: 13px; font-weight: 700; font-family: 'Space Mono', monospace; }
+  .tag {
+    padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+  }
+  .tag.high { background: #FEE2E2; color: var(--risk-high); }
+  .tag.mid { background: #FEF3C7; color: #D97706; }
+  .tag.low { background: #D1FAE5; color: var(--risk-low); }
+
+  /* Recent repairs */
+  .repair-list { display: flex; flex-direction: column; gap: 12px; }
+  .repair-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px; border-radius: 10px; background: var(--light);
+    border: 1px solid var(--border);
+  }
+  .repair-avatar {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .repair-info { flex: 1; }
+  .repair-name { font-size: 13px; font-weight: 600; }
+  .repair-loc { font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .repair-status {
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  }
+  .s-done { background: #D1FAE5; color: var(--risk-low); }
+  .s-ing { background: #DBEAFE; color: #2563EB; }
+  .s-wait { background: #FEE2E2; color: var(--risk-high); }
+
+  /* Chart */
+  .mini-chart { height: 120px; display: flex; align-items: flex-end; gap: 8px; padding-top: 8px; }
+  .bar-group { flex: 1; display: flex; align-items: flex-end; gap: 3px; flex-direction: column; }
+  .chart-bar {
+    width: 100%; border-radius: 4px 4px 0 0;
+    transition: height .6s ease;
+  }
+  .chart-labels { display: flex; justify-content: space-between; margin-top: 8px; }
+  .chart-label { font-size: 10px; color: var(--gray); text-align: center; flex: 1; }
+
+  /* ── FACILITY LIST ── */
+  .filter-bar {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; align-items: center;
+  }
+  .filter-btn {
+    padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    border: 1px solid var(--border); background: #fff; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif; transition: all .2s; color: var(--dark);
+  }
+  .filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .search-input {
+    padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
+    font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+    background: #fff; flex: 1; max-width: 280px;
+  }
+  .search-input:focus { outline: none; border-color: var(--blue); }
+
+  .facility-table { width: 100%; border-collapse: collapse; }
+  .facility-table th {
+    text-align: left; padding: 10px 16px; font-size: 12px; color: var(--gray);
+    font-weight: 600; border-bottom: 2px solid var(--border); letter-spacing: .5px;
+  }
+  .facility-table td {
+    padding: 14px 16px; font-size: 13px; border-bottom: 1px solid var(--border);
+  }
+  .facility-table tr:hover td { background: var(--light); }
+  .fac-name { font-weight: 600; }
+  .fac-id { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--gray); }
+
+  .risk-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700;
+  }
+  .rb-high { background: #FEE2E2; color: var(--risk-high); }
+  .rb-mid { background: #FEF3C7; color: #D97706; }
+  .rb-low { background: #D1FAE5; color: var(--risk-low); }
+  .rb-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  .action-btn {
+    padding: 6px 12px; border-radius: 6px; font-size: 12px;
+    border: 1px solid var(--border); background: #fff; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif; transition: all .2s; font-weight: 600;
+  }
+  .action-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  /* ── REPORT FORM ── */
+  .report-form { max-width: 680px; }
+  .form-section { margin-bottom: 32px; }
+  .form-section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; padding: 12px 16px; border: 1px solid var(--border);
+    border-radius: 10px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+    transition: border-color .2s; background: #fff;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,91,250,0.1);
+  }
+  .form-textarea { min-height: 120px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .qr-demo {
+    border: 2px dashed var(--border); border-radius: 12px;
+    padding: 32px; text-align: center; cursor: pointer;
+    transition: all .2s; background: var(--light);
+  }
+  .qr-demo:hover { border-color: var(--blue); background: rgba(59,91,250,0.04); }
+  .qr-icon { font-size: 48px; margin-bottom: 12px; }
+  .qr-text { font-size: 14px; color: var(--gray); }
+
+  .photo-upload {
+    border: 2px dashed var(--border); border-radius: 12px;
+    padding: 40px; text-align: center; cursor: pointer; transition: all .2s;
+  }
+  .photo-upload:hover { border-color: var(--blue); }
+
+  .submit-btn {
+    background: var(--blue); color: #fff; border: none;
+    padding: 16px 40px; border-radius: 12px; font-size: 16px; font-weight: 700;
+    cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+    width: 100%; transition: all .2s; margin-top: 8px;
+  }
+  .submit-btn:hover { background: var(--blue-light); transform: translateY(-1px); }
+
+  /* ── AI PREDICTION ── */
+  .ai-header {
+    background: linear-gradient(135deg, var(--dark) 0%, #1a1a3e 100%);
+    border-radius: 20px; padding: 32px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .ai-icon-big { font-size: 48px; }
+  .ai-title { font-size: 22px; font-weight: 700; color: #fff; }
+  .ai-desc { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 4px; }
+
+  .prediction-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
+  .pred-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px;
+    position: relative; overflow: hidden;
+  }
+  .pred-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .pred-card.high::before { background: var(--risk-high); }
+  .pred-card.mid::before { background: var(--risk-mid); }
+  .pred-card.low::before { background: var(--risk-low); }
+  .pred-item-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .pred-location { font-size: 12px; color: var(--gray); margin-bottom: 16px; }
+  .pred-score-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .pred-score { font-size: 36px; font-weight: 900; font-family: 'Space Mono', monospace; }
+  .pred-score.high { color: var(--risk-high); }
+  .pred-score.mid { color: var(--risk-mid); }
+  .pred-score.low { color: var(--risk-low); }
+  .pred-label { font-size: 12px; color: var(--gray); }
+  .pred-bar-wrap { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 16px; }
+  .pred-bar { height: 100%; border-radius: 3px; }
+  .high-bar { background: var(--risk-high); }
+  .mid-bar { background: var(--risk-mid); }
+  .low-bar { background: var(--risk-low); }
+  .pred-meta { display: flex; gap: 16px; }
+  .pred-meta-item { font-size: 12px; color: var(--gray); }
+  .pred-meta-item span { font-weight: 600; color: var(--dark); }
+  .pred-action { margin-top: 16px; }
+  .alert-btn {
+    background: var(--dark); color: #fff; border: none;
+    padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all .2s;
+  }
+  .alert-btn:hover { background: var(--blue); }
+
+  /* ── BUDGET ── */
+  .budget-overview {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 24px;
+  }
+  .budget-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+  .budget-label { font-size: 12px; color: var(--gray); margin-bottom: 8px; }
+  .budget-amount { font-size: 28px; font-weight: 900; font-family: 'Space Mono', monospace; }
+  .budget-amount.total { color: var(--dark); }
+  .budget-amount.used { color: var(--blue); }
+  .budget-amount.remain { color: var(--risk-low); }
+  .budget-bar-outer { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 12px; }
+  .budget-bar-inner { height: 100%; border-radius: 4px; background: var(--blue); }
+
+  .donut-wrap { display: flex; align-items: center; gap: 20px; }
+  .donut-svg { width: 120px; height: 120px; }
+  .donut-legend { display: flex; flex-direction: column; gap: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 1000;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fff; border-radius: 20px; padding: 32px;
+    width: 520px; max-width: 90vw; position: relative;
+    animation: slideUp .3s ease;
+  }
+  @keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    background: var(--light); border: none; border-radius: 8px;
+    width: 32px; height: 32px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .modal-sub { font-size: 13px; color: var(--gray); margin-bottom: 24px; }
+  .modal-field { margin-bottom: 12px; }
+  .modal-field label { font-size: 11px; color: var(--gray); margin-bottom: 4px; display: block; letter-spacing: .5px; }
+  .modal-field p { font-size: 14px; font-weight: 600; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 32px; right: 32px;
+    background: var(--dark); color: #fff;
+    padding: 14px 24px; border-radius: 12px; font-size: 14px;
+    display: none; align-items: center; gap: 10px; z-index: 2000;
+    animation: toastIn .3s ease;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .toast.show { display: flex; }
+  @keyframes toastIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px) {
+    .land-nav { padding: 16px 24px; }
+    .land-hero { flex-direction: column; padding: 40px 24px; gap: 40px; }
+    .hero-title { font-size: 40px; }
+    .problems-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .dash-grid { grid-template-columns: 1fr; }
+    .sidebar { width: 64px; }
+    .sidebar-logo .logo-text, .sidebar-logo .logo-sub,
+    .nav-section-label, .nav-item span { display: none; }
+    .main-content { margin-left: 64px; }
+    .prediction-grid { grid-template-columns: 1fr; }
+    .budget-overview { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LANDING PAGE ═══════════════ -->
+<div id="landing">
+  <nav class="land-nav">
+    <div class="logo">
+      <div class="logo-box">SFE</div>
+      <div>
+        <div class="logo-text">바나나는새우것 SFE</div>
+        <div class="logo-sub">SCHOOL FACILITIES EQUIPMENT</div>
+      </div>
+    </div>
+    <div class="land-nav-links">
+      <a onclick="scrollToSection('problems')">문제 배경</a>
+      <a onclick="scrollToSection('solution')">솔루션</a>
+      <a onclick="scrollToSection('effect')">기대 효과</a>
+    </div>
+    <button class="btn-primary" onclick="enterApp()">시스템 체험하기 →</button>
+  </nav>
+
+  <!-- Hero -->
+  <div class="land-hero">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <div class="pulse"></div>
+        AI-POWERED SCHOOL MANAGEMENT
+      </div>
+      <h1 class="hero-title">
+        데이터로 지키는<br>
+        <span class="accent">학교의 일상,</span><br>
+        <span class="line2">SFE 시스템</span>
+      </h1>
+      <p class="hero-desc">
+        단순한 기술의 도입을 넘어, 학교의 일상을 안전하게 해주는 실질적인 변화.<br>
+        머신러닝 기반 랜덤 포레스트 모델로 고장을 예측하고, QR 스캔 한 번으로 수리를 신고합니다.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="enterApp()">대시보드 체험하기</button>
+        <button class="btn-outline" onclick="document.getElementById('problems').scrollIntoView({behavior:'smooth'})">자세히 알아보기</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stats">
+        <div class="stat-card highlight">
+          <div class="stat-num">40<span class="unit">%↑</span></div>
+          <div class="stat-label">업무 효율 향상</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">0<span class="unit">원</span></div>
+          <div class="stat-label">추가 센서 도입 비용</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">80<span class="unit">%</span></div>
+          <div class="stat-label">위험도 초과 시 자동 알림</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">3단계</div>
+          <div class="stat-label">신호등 직관적 알림</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Problems -->
+  <div class="land-problems" id="problems">
+    <div class="section-label">01. BACKGROUND</div>
+    <div class="section-title">사후 처리 중심의 현행 시설 관리,<br>무엇이 문제인가?</div>
+    <div class="problems-grid">
+      <div class="prob-card">
+        <div class="prob-num">01</div>
+        <div class="prob-title">🔴 수동적 사후 접수</div>
+        <div class="prob-desc">고장 발생 후 학생과 교사가 직접 행정실에 수기 신고하며, 예산 승인 및 업체 방문까지 긴 대기 시간이 소요된다.</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">02</div>
+        <div class="prob-title">📺 학습권 침해 발생</div>
+        <div class="prob-desc">스마트 칠판 등 첨단 기기 고장 시 수업 흐름이 단절되며, 육안 파악이 힘든 고가 실험 기자재의 방치 위험이 높다.</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">03</div>
+        <div class="prob-title">📊 데이터 기반 예방 부재</div>
+        <div class="prob-desc">고장 나기 전에 미리 예측하는 체계가 없어, 예측 불가능한 수리비로 인한 학교 예산 낭비가 지속되고 있다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Solution -->
+  <div class="land-problems" id="solution" style="border-top:1px solid rgba(255,255,255,0.06)">
+    <div class="section-label">02. SOLUTION</div>
+    <div class="section-title">SFE가 제안하는 세 가지 해법</div>
+    <div class="problems-grid">
+      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
+        <div class="prob-num" style="color:rgba(59,91,250,0.15)">01</div>
+        <div class="prob-title" style="color:#fff">🤖 지능형 고장 위험도 AI 예측</div>
+        <div class="prob-desc">물품 구매일, 내구연한, 과거 수리 이력을 바탕으로 시설물의 상태를 0%~100%로 시각화. 위험도 80% 초과 시 행정실에 사전 점검 알림을 보내 사고를 예방한다.</div>
+      </div>
+      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
+        <div class="prob-num" style="color:rgba(59,91,250,0.15)">02</div>
+        <div class="prob-title" style="color:#fff">📱 원클릭 스마트 수리 요청 체계</div>
+        <div class="prob-desc">복잡한 서류 절차 대신, 고유 QR코드 스캔과 사진 촬영만으로 간편 접수된다. AI 비전 기술이 파손 유형을 판별해 필요 부품과 소요 예산을 자동으로 산출해 준다.</div>
+      </div>
+      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
+        <div class="prob-num" style="color:rgba(59,91,250,0.15)">03</div>
+        <div class="prob-title" style="color:#fff">💰 데이터 기반 행정 및 예산 최적화</div>
+        <div class="prob-desc">사후 수리 관행에서 탈피해, AI가 제안하는 시설물별 최적 교체 주기를 활용한다. 주먹구구식 집행을 막고 예산을 가장 필요한 곳에 투입시켜 학교 운영의 투명성을 높인다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Effect -->
+  <div class="land-problems" id="effect">
+    <div class="section-label">03. EFFECT</div>
+    <div class="section-title">SFE가 가져올 교내의 행복한 변화</div>
+    <div class="problems-grid">
+      <div class="prob-card">
+        <div class="prob-num">01</div>
+        <div class="prob-title" style="color:#FFD43B">🎓 학생 – 끊김이 없는 하루</div>
+        <div class="prob-desc">수업 도중 기자재가 갑자기 고장 나 낭비되던 10분이 사라진다. 정밀 장비의 결함을 미리 감지하여 동아리 활동과 과학 실험 등 학생들의 소중한 프로젝트가 무산될 위험을 원천 차단한다.</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">02</div>
+        <div class="prob-title" style="color:#FFD43B">🏫 행정 – 사후 수습의 피로에서 예방의 여유로</div>
+        <div class="prob-desc">고장이 터진 후에야 신고를 받고 수리 업체를 부르던 수동적인 사후 처리 방식에서 벗어난다. 데이터 기반의 교체 주기를 파악해 불필요한 예산 낭비를 막고, 행정실의 업무 피로도를 획기적으로 낮춘다.</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">03</div>
+        <div class="prob-title" style="color:#FFD43B">🚀 미래 – 교과서 속 이론이 삶을 바꾸는 경험으로</div>
+        <div class="prob-desc">단순히 데이터 리터러시를 책으로만 배우는 것을 넘어, 공공데이터와 AI 기술이 우리 학교를 어떻게 더 안전하게 바꾸는지 학생들이 온몸으로 체감한다. 진정한 미래형 스마트 학교의 표준이 된다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Road Map -->
+  <div class="land-problems">
+    <div class="section-label">07. ROAD MAP</div>
+    <div class="section-title">우리의 아이디어가 <span style="color:var(--blue-light)">학교의 일상</span>이 되기까지</div>
+    <div class="problems-grid">
+      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
+        <div class="prob-num" style="color:rgba(59,91,250,0.1)">P1</div>
+        <div class="prob-title" style="color:var(--blue-light)">PHASE 01. 단기</div>
+        <div class="prob-title" style="color:#fff; font-size:16px; margin-top:8px">교내 시범 테스트 및 UI 고도화</div>
+        <div class="prob-desc" style="margin-top:8px">Claude AI 기반 베타 버전을 해동고, 부산기공, 부경고 실습실에 우선 적용하여 학생과 교직원의 피드백을 수집하고 시스템을 다듬는다.</div>
+      </div>
+      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
+        <div class="prob-num" style="color:rgba(59,91,250,0.1)">P2</div>
+        <div class="prob-title" style="color:var(--blue-light)">PHASE 02. 중기</div>
+        <div class="prob-title" style="color:#fff; font-size:16px; margin-top:8px">부산 교육청 연계 시범 학교 확대</div>
+        <div class="prob-desc" style="margin-top:8px">부산 관내 10개 시범 학교를 선정하고, 실제 유지보수 공공데이터와의 연동을 통해 AI 예측 모델의 신뢰도를 최종 검증한다.</div>
+      </div>
+      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
+        <div class="prob-num" style="color:rgba(59,91,250,0.1)">P3</div>
+        <div class="prob-title" style="color:var(--blue-light)">PHASE 03. 장기</div>
+        <div class="prob-title" style="color:#fff; font-size:16px; margin-top:8px">대한민국 학교 지능형 표준 확산</div>
+        <div class="prob-desc" style="margin-top:8px">전국 교육시설 재단 및 데이터 허브와 정식 API 연동을 추진하여 데이터 기반의 예방 중심 학교 관리 시스템을 정착시킨다.</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:48px">
+      <button class="btn-primary" style="padding:16px 48px; font-size:16px" onclick="enterApp()">
+        지금 바로 시스템 체험하기 →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="app">
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-box">SFE</div>
+        <div>
+          <div class="logo-text">SFE</div>
+          <div class="logo-sub" style="font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px">School Facilities</div>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">MAIN</div>
+        <div class="nav-item active" onclick="showPage('dashboard',this)">
+          <div class="nav-icon">📊</div><span>대시보드</span>
+        </div>
+        <div class="nav-item" onclick="showPage('facilities',this)">
+          <div class="nav-icon">🏫</div><span>시설물 관리</span>
+        </div>
+        <div class="nav-item" onclick="showPage('prediction',this)">
+          <div class="nav-icon">🤖</div><span>위험도 예측</span>
+        </div>
+        <div class="nav-item" onclick="showPage('report',this)">
+          <div class="nav-icon">📝</div><span>수리 요청</span>
+        </div>
+        <div class="nav-item" onclick="showPage('budget',this)">
+          <div class="nav-icon">💰</div><span>예산 관리</span>
+        </div>
+      </div>
+      <div class="nav-section" style="margin-top:auto">
+        <div class="nav-item" onclick="backToLanding()">
+          <div class="nav-icon">🏠</div><span>메인으로</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main-content">
+
+      <!-- Dashboard -->
+      <div class="page active" id="page-dashboard">
+        <div class="top-bar">
+          <div>
+            <div class="page-title">통합 시설물 관리 대시보드</div>
+            <div class="page-sub">행복중학교 · 관리자 김OO</div>
+          </div>
+          <div class="date-badge" id="dateDisplay"></div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:#EFF6FF">🏫</div>
+            <div class="kpi-body">
+              <div class="kpi-num">1,245</div>
+              <div class="kpi-label">전체 시설물</div>
+              <div class="kpi-change" style="color:var(--gray)">전체 시설물 현황</div>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:#D1FAE5">✅</div>
+            <div class="kpi-body">
+              <div class="kpi-num">1,102</div>
+              <div class="kpi-label">정상 운영</div>
+              <div class="kpi-change down">88.5% 정상</div>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:#FEF3C7">⚠️</div>
+            <div class="kpi-body">
+              <div class="kpi-num">98</div>
+              <div class="kpi-label">점검 필요</div>
+              <div class="kpi-change up">7.9% 주의</div>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:#FEE2E2">🔧</div>
+            <div class="kpi-body">
+              <div class="kpi-num">45</div>
+              <div class="kpi-label">수리 중</div>
+              <div class="kpi-change up">3.6% 수리중</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-title">
+              고장 위험도 TOP 5
+              <a onclick="showPage('prediction', document.querySelector('[onclick*=prediction]'))">전체 보기 →</a>
+            </div>
+            <div class="risk-list">
+              <div class="risk-item">
+                <div class="risk-name">과학실 서랍 (SC-203)</div>
+                <div class="risk-bar-wrap"><div class="risk-bar" style="width:85%;background:var(--risk-high)"></div></div>
+                <div class="risk-pct" style="color:var(--risk-high)">85%</div>
+                <div class="tag high">위험</div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-name">복록존 프젝 (LG-01)</div>
+                <div class="risk-bar-wrap"><div class="risk-bar" style="width:82%;background:var(--risk-high)"></div></div>
+                <div class="risk-pct" style="color:var(--risk-high)">82%</div>
+                <div class="tag high">위험</div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-name">급식실 냉장고 (FC-02)</div>
+                <div class="risk-bar-wrap"><div class="risk-bar" style="width:78%;background:var(--risk-mid)"></div></div>
+                <div class="risk-pct" style="color:var(--risk-mid)">78%</div>
+                <div class="tag mid">주의</div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-name">3-2 교실 에어컨 (AC-12)</div>
+                <div class="risk-bar-wrap"><div class="risk-bar" style="width:76%;background:var(--risk-mid)"></div></div>
+                <div class="risk-pct" style="color:var(--risk-mid)">76%</div>
+                <div class="tag mid">주의</div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-name">도서관 정수기 (WP-03)</div>
+                <div class="risk-bar-wrap"><div class="risk-bar" style="width:74%;background:var(--risk-mid)"></div></div>
+                <div class="risk-pct" style="color:var(--risk-mid)">74%</div>
+                <div class="tag mid">주의</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">최근 수리 요청</div>
+            <div class="repair-list">
+              <div class="repair-item">
+                <div class="repair-avatar" style="background:#EFF6FF">🖥️</div>
+                <div class="repair-info">
+                  <div class="repair-name">3-2 교실 프로젝터</div>
+                  <div class="repair-loc">2024.08.29 14:30</div>
+                </div>
+                <div class="repair-status s-ing">진행중</div>
+              </div>
+              <div class="repair-item">
+                <div class="repair-avatar" style="background:#FEF3C7">💡</div>
+                <div class="repair-info">
+                  <div class="repair-name">급식실 형광등 교체</div>
+                  <div class="repair-loc">2024.08.29 11:15</div>
+                </div>
+                <div class="repair-status s-done">완료</div>
+              </div>
+              <div class="repair-item">
+                <div class="repair-avatar" style="background:#FEE2E2">🚿</div>
+                <div class="repair-info">
+                  <div class="repair-name">1층 화장실 수도꼭지</div>
+                  <div class="repair-loc">2024.08.19 10:45</div>
+                </div>
+                <div class="repair-status s-wait">대기중</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">월별 수리 요청 현황 (최근 6개월)</div>
+          <div class="mini-chart" id="monthChart"></div>
+          <div class="chart-labels">
+            <span class="chart-label">12월</span>
+            <span class="chart-label">1월</span>
+            <span class="chart-label">2월</span>
+            <span class="chart-label">3월</span>
+            <span class="chart-label">4월</span>
+            <span class="chart-label">5월</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Facilities -->
+      <div class="page" id="page-facilities">
+        <div class="top-bar">
+          <div>
+            <div class="page-title">시설물 관리</div>
+            <div class="page-sub">전체 1,245개 시설물</div>
+          </div>
+          <button class="btn-primary" onclick="showToast('새 시설물 등록 기능은 준비 중입니다.')">+ 시설물 등록</button>
+        </div>
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filterFacility('all',this)">전체</button>
+          <button class="filter-btn" onclick="filterFacility('high',this)">위험</button>
+          <button class="filter-btn" onclick="filterFacility('mid',this)">주의</button>
+          <button class="filter-btn" onclick="filterFacility('low',this)">정상</button>
+          <input class="search-input" placeholder="🔍  시설물명 또는 ID 검색..." oninput="searchFacility(this.value)">
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="facility-table" id="facilityTable">
+            <thead>
+              <tr>
+                <th>시설물명</th>
+                <th>위치</th>
+                <th>구매일</th>
+                <th>수리 횟수</th>
+                <th>위험도</th>
+                <th>상태</th>
+                <th>작업</th>
+              </tr>
+            </thead>
+            <tbody id="facilityTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Prediction -->
+      <div class="page" id="page-prediction">
+        <div class="ai-header">
+          <div class="ai-icon-big">🤖</div>
+          <div>
+            <div class="ai-title">지능형 고장 위험도 AI 예측</div>
+            <div class="ai-desc">랜덤 포레스트 모델 기반 · 공공데이터 연동 · 실시간 업데이트</div>
+          </div>
+          <div style="margin-left:auto;text-align:right">
+            <div style="font-size:13px;color:rgba(255,255,255,0.4)">마지막 업데이트</div>
+            <div style="font-size:16px;font-weight:700;color:#fff;font-family:'Space Mono',monospace" id="updateTime"></div>
+          </div>
+        </div>
+        <div class="prediction-grid" id="predGrid"></div>
+      </div>
+
+      <!-- Report -->
+      <div class="page" id="page-report">
+        <div class="top-bar">
+          <div>
+            <div class="page-title">수리 요청</div>
+            <div class="page-sub">QR 스캔 또는 직접 입력으로 간편하게 신고하세요</div>
+          </div>
+        </div>
+        <div class="report-form">
+          <div class="form-section">
+            <div class="form-section-title">📱 QR 코드 스캔</div>
+            <div class="qr-demo" onclick="simulateQR()">
+              <div class="qr-icon">📷</div>
+              <div class="qr-text">카메라로 시설물 QR 코드를 스캔하세요<br><small style="color:var(--blue)">또는 여기를 클릭하여 시뮬레이션</small></div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">📋 신고 정보 입력</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">시설물 ID</label>
+                <input class="form-input" id="facId" placeholder="예: SC-203" value="">
+              </div>
+              <div class="form-group">
+                <label class="form-label">시설물명</label>
+                <input class="form-input" id="facName" placeholder="예: 과학실 서랍">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">위치</label>
+                <input class="form-input" id="facLoc" placeholder="예: 3층 과학실">
+              </div>
+              <div class="form-group">
+                <label class="form-label">고장 유형</label>
+                <select class="form-select" id="faultType">
+                  <option value="">선택하세요</option>
+                  <option>기계적 파손</option>
+                  <option>전기적 오류</option>
+                  <option>노후화</option>
+                  <option>기타</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">상세 내용</label>
+              <textarea class="form-textarea" id="faultDesc" placeholder="고장 상황을 자세히 설명해주세요..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">📸 사진 첨부</div>
+            <div class="photo-upload" onclick="showToast('사진 업로드 기능은 실제 앱에서 사용 가능합니다.')">
+              <div style="font-size:40px;margin-bottom:8px">📷</div>
+              <div style="font-size:14px;color:var(--gray)">클릭하여 사진을 업로드하세요<br><small>AI가 파손 유형을 자동 분석합니다</small></div>
+            </div>
+          </div>
+
+          <button class="submit-btn" onclick="submitReport()">✅ 수리 요청 접수하기</button>
+        </div>
+      </div>
+
+      <!-- Budget -->
+      <div class="page" id="page-budget">
+        <div class="top-bar">
+          <div>
+            <div class="page-title">예산 관리</div>
+            <div class="page-sub">2024학년도 시설 유지보수 예산 현황</div>
+          </div>
+        </div>
+        <div class="budget-overview">
+          <div class="budget-card">
+            <div class="budget-label">총 예산</div>
+            <div class="budget-amount total">50,000,000</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:4px">원</div>
+            <div class="budget-bar-outer"><div class="budget-bar-inner" style="width:100%"></div></div>
+          </div>
+          <div class="budget-card">
+            <div class="budget-label">집행 완료</div>
+            <div class="budget-amount used">18,500,000</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:4px">원 (37%)</div>
+            <div class="budget-bar-outer"><div class="budget-bar-inner" style="width:37%;background:var(--blue)"></div></div>
+          </div>
+          <div class="budget-card">
+            <div class="budget-label">잔여 예산</div>
+            <div class="budget-amount remain">19,200,000</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:4px">원 (38%)</div>
+            <div class="budget-bar-outer"><div class="budget-bar-inner" style="width:38%;background:var(--risk-low)"></div></div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-title">AI 예측 교체 시기 및 예산 가이드</div>
+            <table class="facility-table">
+              <thead>
+                <tr>
+                  <th>시설물</th>
+                  <th>현재 상태</th>
+                  <th>예측 교체 시기</th>
+                  <th>예산 비용(원)</th>
+                  <th>우선순위</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="fac-name">과학실 서랍</span><br><span class="fac-id">SC-203</span></td>
+                  <td><span class="tag high">위험 (85%)</span></td>
+                  <td>2024.07</td>
+                  <td>2,850,000</td>
+                  <td><span class="tag high">A</span></td>
+                </tr>
+                <tr>
+                  <td><span class="fac-name">복록존 프젝</span><br><span class="fac-id">LG-01</span></td>
+                  <td><span class="tag high">위험 (82%)</span></td>
+                  <td>2024.08</td>
+                  <td>1,200,000</td>
+                  <td><span class="tag high">A</span></td>
+                </tr>
+                <tr>
+                  <td><span class="fac-name">급식실 냉장고</span><br><span class="fac-id">FC-02</span></td>
+                  <td><span class="tag mid">주의 (78%)</span></td>
+                  <td>2024.09</td>
+                  <td>1,800,000</td>
+                  <td><span class="tag mid">B</span></td>
+                </tr>
+                <tr>
+                  <td><span class="fac-name">도서관 정수기</span><br><span class="fac-id">WP-03</span></td>
+                  <td><span class="tag mid">주의 (74%)</span></td>
+                  <td>2024.10</td>
+                  <td>950,000</td>
+                  <td><span class="tag mid">B</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-title">예산 현황</div>
+            <div class="donut-wrap" style="flex-direction:column;align-items:center;gap:24px">
+              <svg class="donut-svg" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#f3f4f6" stroke-width="16"/>
+                <circle cx="60" cy="60" r="48" fill="none" stroke="var(--blue)" stroke-width="16"
+                  stroke-dasharray="113 188" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+                <circle cx="60" cy="60" r="48" fill="none" stroke="var(--risk-mid)" stroke-width="16"
+                  stroke-dasharray="76 225" stroke-dashoffset="-113" transform="rotate(-90 60 60)"/>
+                <circle cx="60" cy="60" r="48" fill="none" stroke="var(--risk-low)" stroke-width="16"
+                  stroke-dasharray="116 185" stroke-dashoffset="-189" transform="rotate(-90 60 60)"/>
+                <text x="60" y="56" text-anchor="middle" font-size="11" fill="#6b7280">총 예산</text>
+                <text x="60" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#0A0A14">5천만원</text>
+              </svg>
+              <div class="donut-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>집행 완료 18.5M (37%)</div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--risk-mid)"></div>집행 예정 12.3M (25%)</div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--risk-low)"></div>잔여 예산 19.2M (38%)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end main-content -->
+  </div><!-- end app-layout -->
+</div><!-- end app -->
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle">시설물 상세</div>
+    <div class="modal-sub" id="modalSub"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span>✅</span>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+// ── DATA ──
+const facilities = [
+  {id:'SC-203',name:'과학실 서랍',loc:'3층 과학실',bought:'2019-03-15',repairs:7,risk:85,status:'high'},
+  {id:'LG-01', name:'복도 프로젝터',loc:'2층 복도',bought:'2020-06-01',repairs:5,risk:82,status:'high'},
+  {id:'FC-02', name:'급식실 냉장고',loc:'1층 급식실',bought:'2018-08-20',repairs:8,risk:78,status:'mid'},
+  {id:'AC-12', name:'3-2 교실 에어컨',loc:'3층 3-2교실',bought:'2021-03-10',repairs:3,risk:76,status:'mid'},
+  {id:'WP-03', name:'도서관 정수기',loc:'2층 도서관',bought:'2020-01-05',repairs:4,risk:74,status:'mid'},
+  {id:'PC-01', name:'컴퓨터실 PC #1',loc:'4층 컴퓨터실',bought:'2022-05-15',repairs:1,risk:35,status:'low'},
+  {id:'TV-07', name:'1-3 스마트TV',loc:'1층 1-3교실',bought:'2023-02-20',repairs:0,risk:12,status:'low'},
+  {id:'HT-04', name:'보건실 침대',loc:'2층 보건실',bought:'2019-11-30',repairs:2,risk:28,status:'low'},
+  {id:'DR-09', name:'교장실 책상',loc:'4층 교장실',bought:'2018-03-01',repairs:1,risk:22,status:'low'},
+  {id:'GY-05', name:'체육관 농구대',loc:'1층 체육관',bought:'2020-09-15',repairs:3,risk:45,status:'mid'},
+];
+
+const predictions = [
+  {id:'SC-203',name:'과학실 서랍',loc:'3층 과학실',score:85,level:'high',age:'5년 3개월',repairs:7,note:'즉시 점검 권장'},
+  {id:'LG-01',name:'복도 프로젝터',loc:'2층 복도',score:82,level:'high',age:'4년',repairs:5,note:'이달 내 교체 권장'},
+  {id:'FC-02',name:'급식실 냉장고',loc:'1층 급식실',score:78,level:'mid',age:'6년',repairs:8,note:'2개월 내 점검 권장'},
+  {id:'AC-12',name:'3-2 에어컨',loc:'3층 3-2교실',score:76,level:'mid',age:'3년',repairs:3,note:'냉매 점검 필요'},
+  {id:'WP-03',name:'도서관 정수기',loc:'2층 도서관',score:74,level:'mid',age:'4년',repairs:4,note:'필터 교체 권장'},
+  {id:'GY-05',name:'체육관 농구대',loc:'1층 체육관',score:45,level:'low',age:'4년',repairs:3,note:'정기 점검 예정'},
+];
+
+// ── INIT ──
+window.onload = () => {
+  // Date
+  const now = new Date();
+  const opts = {year:'numeric',month:'long',day:'numeric'};
+  document.getElementById('dateDisplay').textContent = now.toLocaleDateString('ko-KR',opts);
+  document.getElementById('updateTime').textContent = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+  renderFacilityTable(facilities);
+  renderPredictions(predictions);
+  renderChart();
+};
+
+// ── NAVIGATION ──
+function enterApp() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+function backToLanding() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
+}
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+// ── CHART ──
+function renderChart() {
+  const data = [28,35,18,45,52,38];
+  const max = Math.max(...data);
+  const container = document.getElementById('monthChart');
+  container.innerHTML = data.map((v,i) => `
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+      <div style="width:100%;height:${(v/max)*100}%;border-radius:6px 6px 0 0;
+        background:${i===4?'var(--blue)':'var(--border)'};
+        transition:height .6s ease;min-height:4px"></div>
+    </div>
+  `).join('');
+}
+
+// ── FACILITY TABLE ──
+let currentFilter = 'all';
+function renderFacilityTable(list) {
+  const tbody = document.getElementById('facilityTbody');
+  tbody.innerHTML = list.map(f => `
+    <tr>
+      <td><div class="fac-name">${f.name}</div><div class="fac-id">${f.id}</div></td>
+      <td>${f.loc}</td>
+      <td style="font-family:'Space Mono',monospace;font-size:12px">${f.bought}</td>
+      <td style="text-align:center">${f.repairs}회</td>
+      <td>
+        <span class="risk-badge rb-${f.status}">
+          <span class="rb-dot"></span>${f.risk}%
+        </span>
+      </td>
+      <td><span class="tag ${f.status}">${f.status==='high'?'위험':f.status==='mid'?'주의':'정상'}</span></td>
+      <td>
+        <button class="action-btn" onclick="showFacilityDetail('${f.id}')">상세</button>
+        <button class="action-btn" onclick="showPage('report',document.querySelector('[onclick*=report]'));document.getElementById('facId').value='${f.id}';document.getElementById('facName').value='${f.name}';document.getElementById('facLoc').value='${f.loc}'" style="margin-left:4px">신고</button>
+      </td>
+    </tr>
+  `).join('');
+}
+function filterFacility(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = f==='all' ? facilities : facilities.filter(x=>x.status===f);
+  renderFacilityTable(filtered);
+}
+function searchFacility(q) {
+  const filtered = facilities.filter(f =>
+    f.name.includes(q) || f.id.toLowerCase().includes(q.toLowerCase()) || f.loc.includes(q)
+  );
+  renderFacilityTable(filtered);
+}
+function showFacilityDetail(id) {
+  const f = facilities.find(x=>x.id===id);
+  if(!f) return;
+  document.getElementById('modalTitle').textContent = f.name;
+  document.getElementById('modalSub').textContent = `${f.id} · ${f.loc}`;
+  document.getElementById('modalBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div class="modal-field"><label>구매일</label><p>${f.bought}</p></div>
+      <div class="modal-field"><label>수리 횟수</label><p>${f.repairs}회</p></div>
+      <div class="modal-field"><label>현재 위험도</label><p style="color:${f.status==='high'?'var(--risk-high)':f.status==='mid'?'var(--risk-mid)':'var(--risk-low)'};font-size:24px;font-family:'Space Mono',monospace">${f.risk}%</p></div>
+      <div class="modal-field"><label>상태</label><p><span class="tag ${f.status}">${f.status==='high'?'위험':f.status==='mid'?'주의':'정상'}</span></p></div>
+    </div>
+    <div class="risk-bar-wrap" style="height:12px;margin-bottom:16px">
+      <div class="risk-bar" style="width:${f.risk}%;background:${f.status==='high'?'var(--risk-high)':f.status==='mid'?'var(--risk-mid)':'var(--risk-low)'}"></div>
+    </div>
+    <button class="submit-btn" style="font-size:14px;padding:12px" onclick="closeModal();showPage('report',document.querySelector('[onclick*=report]'));document.getElementById('facId').value='${f.id}';document.getElementById('facName').value='${f.name}'">📝 수리 요청 바로가기</button>
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+// ── PREDICTIONS ──
+function renderPredictions(preds) {
+  document.getElementById('predGrid').innerHTML = preds.map(p => `
+    <div class="pred-card ${p.level}">
+      <div class="pred-item-name">${p.name}</div>
+      <div class="pred-location">📍 ${p.loc} · ${p.id}</div>
+      <div class="pred-score-row">
+        <div>
+          <div class="pred-score ${p.level}">${p.score}<span style="font-size:20px">%</span></div>
+          <div class="pred-label">고장 위험도</div>
+        </div>
+        <div style="text-align:right">
+          <div class="tag ${p.level}" style="font-size:13px;padding:6px 12px">${p.level==='high'?'⚠️ 즉시 조치':p.level==='mid'?'🔶 주의 필요':'✅ 정상'}</div>
+        </div>
+      </div>
+      <div class="pred-bar-wrap">
+        <div class="pred-bar ${p.level}-bar" style="width:${p.score}%"></div>
+      </div>
+      <div class="pred-meta">
+        <div class="pred-meta-item">사용 기간 <span>${p.age}</span></div>
+        <div class="pred-meta-item">수리 이력 <span>${p.repairs}회</span></div>
+      </div>
+      <div class="pred-action">
+        <button class="alert-btn" onclick="sendAlert('${p.name}',${p.score})">🔔 행정실 알림 전송</button>
+      </div>
+    </div>
+  `).join('');
+}
+function sendAlert(name, score) {
+  showToast(`✅ ${name} (${score}%) 점검 알림이 행정실로 전송되었습니다.`);
+}
+
+// ── REPORT ──
+function simulateQR() {
+  const random = facilities[Math.floor(Math.random()*facilities.length)];
+  document.getElementById('facId').value = random.id;
+  document.getElementById('facName').value = random.name;
+  document.getElementById('facLoc').value = random.loc;
+  showToast(`QR 스캔 완료: ${random.name} (${random.id})`);
+}
+function submitReport() {
+  const id = document.getElementById('facId').value;
+  const name = document.getElementById('facName').value;
+  const type = document.getElementById('faultType').value;
+  if(!id || !name || !type) { showToast('⚠️ 필수 항목을 모두 입력해주세요.'); return; }
+  showToast(`✅ 수리 요청이 접수되었습니다! (${name})`);
+  setTimeout(() => {
+    document.getElementById('facId').value='';
+    document.getElementById('facName').value='';
+    document.getElementById('facLoc').value='';
+    document.getElementById('faultType').value='';
+    document.getElementById('faultDesc').value='';
+  }, 500);
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Click outside modal to close
+document.getElementById('modal').addEventListener('click', e => {
+  if(e.target===e.currentTarget) closeModal();
+});
+</script>
+</body>
+</html>
