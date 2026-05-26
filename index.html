@@ -799,6 +799,13 @@
   .form-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 
   /* responsive */
+  .mobile-float-nav{position:fixed;left:12px;right:12px;z-index:70;display:none;justify-content:space-between;gap:10px;pointer-events:none}
+  .mobile-float-nav.top{top:calc(12px + env(safe-area-inset-top))}
+  .mobile-float-nav.bottom{bottom:calc(12px + env(safe-area-inset-bottom))}
+  .mobile-float-nav .btn{pointer-events:auto}
+  @media (max-width: 900px){
+    .mobile-float-nav{display:flex}
+  }
   @media (max-width: 1180px){
     .hero-grid,.grid-2,.dash-grid,.form-layout,.analytics-grid,.chat-wrap,.budget-visual{grid-template-columns:1fr}
     .app-shell{grid-template-columns:88px 1fr}
@@ -832,6 +839,14 @@
 </style>
 </head>
 <body>
+<div class="mobile-float-nav top">
+  <button class="btn secondary sm" onclick="historyBack()">← 뒤로가기</button>
+  <button class="btn primary sm" onclick="goHome()">홈으로</button>
+</div>
+<div class="mobile-float-nav bottom">
+  <button class="btn secondary sm" onclick="historyBack()">← 뒤로가기</button>
+  <button class="btn primary sm" onclick="goHome()">홈으로</button>
+</div>
 
 <!-- LANDING -->
 <section id="landing">
@@ -1166,6 +1181,7 @@
               <button class="tab" data-report-tab="manual">직접 입력</button>
               <button class="tab" data-report-tab="camera">카메라</button>
             </div>
+            <div class="muted-note" style="margin-top:10px">시설물 ID와 구매 연도가 기억나지 않으면 검색창으로 바로 찾을 수 있습니다.</div>
 
             <div class="mock-box" id="reportModeBox">
               <div class="mock-area" id="qrArea">
@@ -1188,6 +1204,11 @@
               </div>
 
               <div class="hidden" id="manualArea">
+                <div class="field" style="margin-bottom:12px">
+                  <label>시설물 빠른 검색</label>
+                  <input class="input" id="reportLookup" placeholder="시설물명 / ID / 위치 / 구매연도 검색">
+                  <div class="muted-note" id="reportLookupHint">검색하면 ID와 구매연도를 바로 찾을 수 있습니다.</div>
+                </div>
                 <div class="grid-2f">
                   <div class="field">
                     <label>시설물 ID</label>
@@ -1203,6 +1224,12 @@
                     <label>위치</label>
                     <input class="input" id="repLoc" placeholder="예: 3층 과학실">
                   </div>
+                  <div class="field">
+                    <label>구매 연도</label>
+                    <input class="input" id="repBoughtYear" placeholder="예: 2019">
+                  </div>
+                </div>
+                <div class="grid-2f">
                   <div class="field">
                     <label>고장 유형</label>
                     <select class="select" id="faultType">
@@ -1255,6 +1282,7 @@
               <div class="stat-row"><span>선택 시설물</span><strong id="previewName">-</strong></div>
               <div class="stat-row"><span>ID</span><strong id="previewId">-</strong></div>
               <div class="stat-row"><span>위치</span><strong id="previewLoc">-</strong></div>
+              <div class="stat-row"><span>구매 연도</span><strong id="previewBoughtYear">-</strong></div>
               <div class="stat-row"><span>추천 고장 유형</span><strong id="previewType">-</strong></div>
               <div class="stat-row"><span>예상 점수</span><strong id="previewScore">0점</strong></div>
             </div>
@@ -1459,9 +1487,19 @@
       <button class="tab" id="tabSignup" onclick="openAuth('signup')">회원가입</button>
     </div>
     <div id="authForm">
-      <div class="field">
-        <label>아이디</label>
-        <input class="input" id="authId" placeholder="아이디 입력" />
+      <div class="form-grid-3">
+        <div class="field">
+          <label>학교</label>
+          <input class="input" id="authSchool" placeholder="예: 행복중학교" />
+        </div>
+        <div class="field">
+          <label>학번 / 사번</label>
+          <input class="input" id="authNumber" placeholder="예: 2401 / A-01" />
+        </div>
+        <div class="field">
+          <label>아이디</label>
+          <input class="input" id="authId" placeholder="아이디 입력" />
+        </div>
       </div>
       <div class="field">
         <label>비밀번호</label>
@@ -1470,20 +1508,20 @@
       <div id="signupExtra" class="hidden">
         <div class="form-grid-3">
           <div class="field">
+            <label>학년</label>
+            <input class="input" id="authGrade" placeholder="예: 2" />
+          </div>
+          <div class="field">
             <label>이름</label>
             <input class="input" id="authName" placeholder="이름" />
           </div>
           <div class="field">
             <label>역할</label>
             <select class="select" id="authRole">
-              <option>관리자</option>
-              <option>학생</option>
-              <option>교사</option>
+              <option value="admin">관리자</option>
+              <option value="student">학생</option>
+              <option value="teacher">교사</option>
             </select>
-          </div>
-          <div class="field">
-            <label>연락처</label>
-            <input class="input" id="authPhone" placeholder="연락처" />
           </div>
         </div>
       </div>
@@ -1600,6 +1638,8 @@ const state = {
   selectedReportMode: 'qr',
   selectedFile: null,
   points: 1840,
+  currentUser: JSON.parse(localStorage.getItem('sfe_currentUser') || 'null'),
+  accounts: JSON.parse(localStorage.getItem('sfe_accounts') || '[]'),
   monthlyData: [24, 31, 19, 40, 54, 46],
   totalBudget: 50000000,
   currentTicketId: null,
@@ -1692,6 +1732,13 @@ function statusLabel(status){
     low:'정상', mid:'주의', high:'위험', repair:'수리중', done:'수리완료'
   })[status] || status;
 }
+function getAccountKey(school, number, role){
+  return `${school}__${number}__${role}`;
+}
+function saveAuthState(){
+  localStorage.setItem('sfe_accounts', JSON.stringify(state.accounts));
+  localStorage.setItem('sfe_currentUser', JSON.stringify(state.currentUser));
+}
 function statusClass(status){
   return ({
     low:'p-ok', mid:'p-check', high:'p-check', repair:'p-repair', done:'p-done'
@@ -1708,6 +1755,23 @@ function ticketColor(status){
   })[status] || '#64748b';
 }
 function currentUserLabel(){ return '관리자'; }
+if(!state.accounts.length){
+  state.accounts.push({
+    key: getAccountKey('행복중학교', 'admin', 'admin'),
+    school: '행복중학교',
+    number: 'admin',
+    id: 'admin',
+    pw: '1234',
+    grade: '-',
+    name: '관리자',
+    role: 'admin',
+    points: state.points,
+    createdAt: new Date().toISOString()
+  });
+}
+if(state.currentUser){
+  state.points = state.currentUser.points || state.points;
+}
 
 function enterApp(){
   document.getElementById('landing').style.display='none';
@@ -1720,6 +1784,17 @@ function backToLanding(){
   document.getElementById('app').style.display='none';
   document.getElementById('landing').style.display='block';
   window.scrollTo({top:0,behavior:'smooth'});
+}
+function historyBack(){
+  if(document.getElementById('app').style.display === 'block' && state.currentPage !== 'dashboard'){
+    showPage('dashboard');
+  }else{
+    backToLanding();
+  }
+}
+function goHome(){
+  if(document.getElementById('app').style.display !== 'block') enterApp();
+  showPage('dashboard');
 }
 function scrollToId(id){
   const el = document.getElementById(id);
@@ -1744,6 +1819,7 @@ function showPage(name){
   document.getElementById('pageTitle').textContent = titles[name][0];
   document.getElementById('pageDesc').textContent = titles[name][1];
   renderAll();
+  if(name === 'assistant') setTimeout(()=>focusChatInput(), 120);
 }
 
 function renderAll(){
@@ -2051,6 +2127,13 @@ function renderAssistant(){
   `).join('');
   const box = document.getElementById('chatMessages');
   box.scrollTop = box.scrollHeight;
+  if(state.currentPage === 'assistant') focusChatInput();
+}
+function focusChatInput(){
+  const input = document.getElementById('chatInput');
+  if(!input) return;
+  input.focus();
+  setTimeout(()=>input.focus(), 30);
 }
 function escapeHtml(str){
   return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
@@ -2060,11 +2143,13 @@ function renderReportPreview(){
   const id = document.getElementById('repId')?.value?.trim() || '-';
   const name = document.getElementById('repName')?.value?.trim() || '-';
   const loc = document.getElementById('repLoc')?.value?.trim() || '-';
+  const boughtYear = document.getElementById('repBoughtYear')?.value?.trim() || '-';
   const type = document.getElementById('faultType')?.value || '-';
   const score = state.selectedFile ? Math.min(100, 60 + (document.getElementById('faultDesc').value.length > 20 ? 20 : 10)) : 0;
   document.getElementById('previewId').textContent = id;
   document.getElementById('previewName').textContent = name;
   document.getElementById('previewLoc').textContent = loc;
+  document.getElementById('previewBoughtYear').textContent = boughtYear;
   document.getElementById('previewType').textContent = type;
   document.getElementById('previewScore').textContent = score + '점';
 }
@@ -2092,9 +2177,11 @@ function updatePreviewFromInputs(){
   const name = document.getElementById('repName').value;
   const id = document.getElementById('repId').value;
   const loc = document.getElementById('repLoc').value;
+  const boughtYear = document.getElementById('repBoughtYear').value;
   document.getElementById('previewName').textContent = name || '-';
   document.getElementById('previewId').textContent = id || '-';
   document.getElementById('previewLoc').textContent = loc || '-';
+  document.getElementById('previewBoughtYear').textContent = boughtYear || '-';
   document.getElementById('previewType').textContent = type || '-';
   if(desc || name || id || loc) {
     const rule = analyzeText(desc, [name,id,loc].join(' '));
@@ -2143,11 +2230,13 @@ function fillReportForm(id){
   document.getElementById('repId').value = f.id;
   document.getElementById('repName').value = f.name;
   document.getElementById('repLoc').value = f.loc;
+  document.getElementById('repBoughtYear').value = String(new Date(f.bought).getFullYear());
   document.getElementById('faultDesc').value = f.memo || '';
   document.getElementById('faultType').value = inferFaultType(f);
   document.getElementById('previewName').textContent = f.name;
   document.getElementById('previewId').textContent = f.id;
   document.getElementById('previewLoc').textContent = f.loc;
+  document.getElementById('previewBoughtYear').textContent = String(new Date(f.bought).getFullYear());
   document.getElementById('previewType').textContent = document.getElementById('faultType').value;
   document.getElementById('previewScore').textContent = (60 + Math.round(calcRisk(f)/2)) + '점';
   updatePreviewFromInputs();
@@ -2200,17 +2289,32 @@ function submitReport(){
   const id = document.getElementById('repId').value.trim();
   const name = document.getElementById('repName').value.trim();
   const loc = document.getElementById('repLoc').value.trim();
+  const boughtYear = document.getElementById('repBoughtYear').value.trim();
   const type = document.getElementById('faultType').value;
   const desc = document.getElementById('faultDesc').value.trim();
-  if(!id || !name || !type || !desc){
+  if(!id || !name || !boughtYear || !loc || !type || !desc){
     showToast('필수 항목을 모두 입력해주세요.');
     return;
   }
-  const analysis = buildAnalysisFromReport();
   const fac = state.facilities.find(f=>f.id===id);
+  const combined = `${id} ${name} ${loc} ${type} ${desc}`.toLowerCase();
+  if(/허위|고의|장난|테스트|일부러|수리완료|이미.*완료|완료된|학교와 무관|악용/.test(combined)){
+    showToast('이 상황은 신고할 수 없습니다. 완료·허위·악용 항목은 접수되지 않습니다.');
+    return;
+  }
+  if(fac && fac.status === 'done'){
+    showToast('수리완료된 시설은 다시 신고할 수 없습니다.');
+    return;
+  }
+  if(state.tickets.some(t => t.facId === id && t.status !== '수리완료')){
+    showToast('이미 처리 중인 신고가 있습니다. 중복 접수는 막았습니다.');
+    return;
+  }
+  const analysis = buildAnalysisFromReport();
   const status = analysis.score >= 70 ? '수리중' : '접수';
   const ticketId = `T-${Math.floor(1000 + Math.random()*9000)}`;
   const estimate = estimateCost(fac, analysis.score);
+  const points = rewardPoints(id, name, desc, !!state.selectedFile, status);
   state.tickets.unshift({
     id: ticketId,
     facId: id,
@@ -2220,7 +2324,7 @@ function submitReport(){
     type,
     desc,
     analysis: `${analysis.summary} ${analysis.recommendation}`,
-    points: rewardPoints(id, name, desc, !!state.selectedFile, status),
+    points,
     estimate,
     actual: 0,
     source: state.selectedReportMode === 'qr' ? 'QR' : state.selectedReportMode === 'camera' ? '카메라' : '직접',
@@ -2232,8 +2336,12 @@ function submitReport(){
   }else if(fac){
     fac.repairs += 1;
   }
-  state.points += state.tickets[0].points;
-  showToast(`접수 완료! +${state.tickets[0].points}점 지급`);
+  state.points += points;
+  if(state.currentUser){
+    state.currentUser.points = (state.currentUser.points || 0) + points;
+    saveAuthState();
+  }
+  showToast(`접수 완료! +${points}점 지급`);
   clearReportForm(false);
   renderAll();
   showPage('dashboard');
@@ -2335,26 +2443,62 @@ function openAuth(mode){
   document.getElementById('tabSignup').classList.toggle('active', mode==='signup');
   document.getElementById('authTitle').textContent = mode === 'login' ? '로그인' : '회원가입';
   document.getElementById('authDesc').textContent = mode === 'login'
-    ? '테스트용 로그인 화면입니다. 실제 인증 대신 즉시 확인용으로 동작합니다.'
-    : '회원가입 화면입니다. 입력값을 확인하고 바로 완료 처리합니다.';
+    ? '학교·학번·비밀번호로 로그인합니다. 같은 학교 계정은 같은 작업공간을 사용합니다.'
+    : '회원가입 시 학교와 학번을 입력하면 같은 학교 구성원과 계정이 연결됩니다.';
   document.getElementById('signupExtra').classList.toggle('hidden', mode !== 'signup');
+  if(mode === 'signup'){
+    document.getElementById('authSchool').value = document.getElementById('authSchool').value || '행복중학교';
+    document.getElementById('authGrade').value = document.getElementById('authGrade').value || '2';
+  }
+  setTimeout(()=>document.getElementById('authId').focus(), 120);
 }
 function closeAuth(){ document.getElementById('authOverlay').classList.remove('open'); }
 function submitAuth(){
   const id = document.getElementById('authId').value.trim();
   const pw = document.getElementById('authPw').value.trim();
-  if(!id || !pw){
-    showToast('아이디와 비밀번호를 입력해주세요.');
+  const school = (document.getElementById('authSchool')?.value || '행복중학교').trim();
+  const number = (document.getElementById('authNumber')?.value || '').trim();
+  const grade = (document.getElementById('authGrade')?.value || '').trim();
+  const name = (document.getElementById('authName')?.value || '').trim();
+  const role = document.getElementById('authRole')?.value || 'student';
+  if(!id || !pw || !number){
+    showToast('학교, 학번/사번, 아이디와 비밀번호를 모두 입력해주세요.');
     return;
   }
   if(state.authMode === 'signup'){
-    const name = document.getElementById('authName').value.trim();
-    if(!name){ showToast('이름도 입력해주세요.'); return; }
-    showToast(`회원가입 완료: ${name}`);
+    if(!school || !name){
+      showToast('학교와 이름을 입력해주세요.');
+      return;
+    }
+    const key = getAccountKey(school, number, role);
+    const existing = state.accounts.find(a => a.key === key);
+    const account = {
+      key, school, number, id, pw, grade: grade || '-', name, role,
+      points: existing ? existing.points : state.points,
+      createdAt: existing ? existing.createdAt : new Date().toISOString()
+    };
+    if(existing){
+      Object.assign(existing, account);
+    }else{
+      state.accounts.push(account);
+    }
+    state.currentUser = account;
+    state.points = account.points || 0;
+    saveAuthState();
+    showToast(`회원가입 완료: ${name} · ${school}`);
   } else {
-    showToast('로그인 완료');
+    const account = state.accounts.find(a => a.school === school && a.number === number && a.id === id && a.pw === pw);
+    if(!account){
+      showToast('계정이 없거나 비밀번호가 다릅니다.');
+      return;
+    }
+    state.currentUser = account;
+    state.points = account.points || state.points;
+    saveAuthState();
+    showToast(`로그인 완료: ${account.name} · ${account.school}`);
   }
   closeAuth();
+  renderAll();
 }
 
 function openFacilityForm(){
@@ -2435,22 +2579,40 @@ function sendChat(){
   state.chat.push({who:'me', text:msg});
   input.value = '';
   renderAssistant();
+  input.focus();
   setTimeout(()=>{
     const reply = autoReply(msg);
     state.chat.push({who:'bot', text:reply});
     renderAssistant();
+    input.focus();
   }, 350);
+}
+function pickOne(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 function autoReply(msg){
   const t = msg.toLowerCase();
-  if (t.includes('qr') || t.includes('스캔')) return 'QR 신고는 QR 스캔 버튼을 누르면 자동 입력됩니다. 시설물 ID와 위치가 채워진 뒤 바로 사진과 함께 접수할 수 있습니다.';
-  if (t.includes('카메라') || t.includes('촬영')) return '카메라 모의 기능은 촬영 시뮬레이션을 실행한 뒤 가장 가까운 시설을 자동으로 찾아줍니다.';
-  if (t.includes('사진') || t.includes('ai 분석') || t.includes('분석')) return '사진을 첨부하면 AI가 텍스트와 파일 정보를 함께 해석해 고장 유형과 추천 조치를 정리합니다.';
-  if (t.includes('예산') || t.includes('비용') || t.includes('잔여')) return '예산 화면에서는 수리완료의 실집행액, 수리중/접수의 예상 집행액, 잔여 예산을 분리해서 계산합니다.';
-  if (t.includes('등록') || t.includes('시설')) return '시설물 등록은 시설명, ID, 종류, 위치, 구매일, 상태를 입력하면 즉시 목록에 추가됩니다.';
-  if (t.includes('포인트') || t.includes('보상') || t.includes('점수')) return '신고가 정확하고 첨부 자료가 많을수록 기여점수가 높아집니다. 점수 구간에 따라 보상 단계가 올라갑니다.';
-  if (t.includes('완료') || t.includes('수리완료')) return '수리완료 상태는 신고 상세와 시설물 현황, 대시보드 최근 처리 현황에서 같은 상태값으로 유지됩니다.';
-  return '질문해주신 내용은 SFE 안에서 처리 가능합니다. QR 신고, 카메라 모의, 사진 분석, 예산 계산, 시설 등록 중 어떤 항목인지 조금 더 구체적으로 적어주시면 바로 안내합니다.';
+  const replies = {
+    qr:['QR 신고는 QR 스캔 버튼을 누르면 자동 입력됩니다. 시설물 ID와 위치가 채워진 뒤 바로 사진과 함께 접수할 수 있습니다.','QR을 쓰면 시설물 검색 시간을 줄일 수 있습니다. 스캔 후 바로 신고 화면으로 넘어가도록 연결했습니다.','QR 모의 스캔은 시설을 빠르게 선택하기 위한 기능입니다. 입력창을 직접 채우는 것보다 훨씬 덜 번거롭습니다.'],
+    camera:['카메라 모의 기능은 촬영 시뮬레이션을 실행한 뒤 가장 가까운 시설을 자동으로 찾아줍니다.','카메라를 열면 시설 선택이 자동으로 이어집니다. 모바일에서 더 편하게 쓰도록 만들어 두었습니다.','실제 촬영처럼 보이지만 시설 데이터를 자동 인식하는 흐름입니다. 한 번만 누르면 됩니다.'],
+    photo:['사진을 첨부하면 AI가 텍스트와 파일 정보를 함께 해석해 고장 유형과 추천 조치를 정리합니다.','업로드된 사진은 분석 결과와 함께 저장됩니다. 실패 메시지 대신 바로 요약이 나오도록 바꿨습니다.','사진 분석은 파일명과 신고 내용, 화면 정보를 함께 봅니다. 결과가 애매하면 추가 설명을 붙이면 더 정확해집니다.'],
+    budget:['예산 화면에서는 수리완료의 실집행액, 수리중/접수의 예상 집행액, 잔여 예산을 분리해서 계산합니다.','집행 완료, 예약 집행, 잔여 예산을 서로 섞지 않도록 계산 로직을 나눴습니다.','신고가 쌓일수록 예상 비용도 함께 반영됩니다. 남은 예산은 자동으로 다시 계산됩니다.'],
+    facility:['시설물 등록은 시설명, ID, 종류, 위치, 구매일, 상태를 입력하면 즉시 목록에 추가됩니다.','시설물 ID와 구매 연도를 모르겠다면 검색창에서 바로 찾을 수 있습니다.','시설물 정보는 검색과 빠른 입력으로 이어집니다. 같은 학교 계정이면 더 빠르게 연결됩니다.'],
+    points:['신고가 정확하고 첨부 자료가 많을수록 기여점수가 높아집니다. 점수 구간에 따라 보상 단계가 올라갑니다.','포인트는 실제 도움이 되는 신고에 많이 붙고, 허위나 중복 신고는 제외됩니다.','점수가 높을수록 보상 배지가 늘어납니다. 활동 기록용으로도 확인할 수 있습니다.'],
+    complete:['수리완료 상태는 신고 상세와 시설물 현황, 대시보드 최근 처리 현황에서 같은 상태값으로 유지됩니다.','완료된 신고는 접수로 되돌리지 않고, 상세 화면에서도 수리완료로 그대로 보이게 했습니다.','수리중과 수리완료를 구분해서 표시하므로 상태가 섞이지 않습니다.'],
+    school:['회원가입 때 학교와 학번을 함께 입력하면 같은 학교의 계정이 연결됩니다.','학교 계정은 학교·학번·직군 기준으로 관리합니다. 다른 학교로 가면 별도 계정처럼 분리됩니다.','같은 학교 교사와 관리자는 같은 학교 공간에서 이어서 쓰고, 다른 학교는 별개로 취급합니다.'],
+    block:['이 상황은 신고할 수 없습니다. 완료·허위·악용 항목은 접수되지 않습니다.','중복 신고나 이미 끝난 항목은 포인트만 노리는 구조가 되지 않도록 막아 두었습니다.','신고 불가 상황은 바로 차단하고, 가능한 경우만 접수되도록 했습니다.']
+  };
+  if (t.includes('qr') || t.includes('스캔')) return pickOne(replies.qr);
+  if (t.includes('카메라') || t.includes('촬영')) return pickOne(replies.camera);
+  if (t.includes('사진') || t.includes('ai 분석') || t.includes('분석')) return pickOne(replies.photo);
+  if (t.includes('예산') || t.includes('비용') || t.includes('잔여')) return pickOne(replies.budget);
+  if (t.includes('등록') || t.includes('시설') || t.includes('id') || t.includes('연도')) return pickOne(replies.facility);
+  if (t.includes('포인트') || t.includes('보상') || t.includes('점수')) return pickOne(replies.points);
+  if (t.includes('완료') || t.includes('수리완료')) return pickOne(replies.complete);
+  if (t.includes('학교') || t.includes('학번') || t.includes('교사') || t.includes('계정')) return pickOne(replies.school);
+  if (t.includes('불가') || t.includes('막') || t.includes('허위') || t.includes('중복')) return pickOne(replies.block);
+  return pickOne(['질문해주신 내용은 SFE 안에서 처리 가능합니다. 시설물명이나 상황을 한 줄만 더 주시면 바로 맞춰서 설명하겠습니다.','조금 더 구체적으로 말해 주면 바로 정리해 드릴게요. 시설물, 신고, 계정, 예산 중 어느 쪽인지 알려 주세요.','상황을 조금만 더 알려 주시면 화면 흐름에 맞게 바로 안내하겠습니다. 지금은 여러 경우가 섞여 있어서 확인이 필요합니다.']);
 }
 
 function estimatePhotoPreview(file){
@@ -2466,6 +2628,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.querySelectorAll('.nav-item[data-page]').forEach(item=>{
     item.addEventListener('click', ()=> showPage(item.dataset.page));
   });
+  ['quickHomeBtn','mobileHomeBtn','mobileBottomHome'].forEach(id=>{ const b=document.getElementById(id); if(b) b.addEventListener('click', goHome); });
+  ['quickBackBtn','mobileBackBtn','mobileBottomBack'].forEach(id=>{ const b=document.getElementById(id); if(b) b.addEventListener('click', historyBack); });
 
   // report tabs
   document.querySelectorAll('.tab[data-report-tab]').forEach(t=>{
@@ -2485,11 +2649,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 
   // form bindings
-  ['repId','repName','repLoc','faultDesc','faultType'].forEach(id=>{
+  ['repId','repName','repLoc','repBoughtYear','faultDesc','faultType'].forEach(id=>{
     const el = document.getElementById(id);
+    if(!el) return;
     el.addEventListener('input', ()=>{ updatePreview(); renderFacilities(); });
     el.addEventListener('change', ()=>{ updatePreview(); });
   });
+
+  const reportLookup = document.getElementById('reportLookup');
+  if(reportLookup){
+    reportLookup.addEventListener('input', ()=>{
+      const q = reportLookup.value.trim().toLowerCase();
+      const hint = document.getElementById('reportLookupHint');
+      if(!q){
+        hint.textContent = '검색하면 ID와 구매연도를 바로 찾을 수 있습니다.';
+        return;
+      }
+      const hits = state.facilities.filter(f => [f.id, f.name, f.loc, String(new Date(f.bought).getFullYear())].join(' ').toLowerCase().includes(q)).slice(0,4);
+      hint.textContent = hits.length
+        ? '추천: ' + hits.map(f => `${f.name} (${f.id}, ${new Date(f.bought).getFullYear()}년)`).join(' · ')
+        : '일치하는 시설이 없습니다. 시설명이나 ID 일부를 다시 입력해 주세요.';
+      if(hits.length === 1){
+        fillReportForm(hits[0].id);
+      }
+    });
+  }
 
   document.getElementById('photoInput').addEventListener('change', e=>{
     const file = e.target.files && e.target.files[0];
@@ -2508,7 +2692,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
     showToast('사진 첨부 및 AI 분석이 완료되었습니다.');
   });
 
-  document.getElementById('chatInput').addEventListener('input', ()=>{});
+  const chatInput = document.getElementById('chatInput');
+  chatInput.addEventListener('input', ()=>{});
+  chatInput.addEventListener('pointerdown', ()=> setTimeout(()=>chatInput.focus(), 0));
+  chatInput.addEventListener('focus', ()=> setTimeout(()=>chatInput.focus(), 0));
   document.getElementById('chatMessages').addEventListener('click', ()=>{});
 
   // modal close
@@ -2522,6 +2709,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('newType').innerHTML = state.typeMap.map(t=>`<option value="${t}">${t}</option>`).join('');
   document.getElementById('newBought').value = new Date().toISOString().slice(0,10);
   document.getElementById('newAge').value = '3';
+  const authSchool = document.getElementById('authSchool');
+  const authGrade = document.getElementById('authGrade');
+  if(authSchool && !authSchool.value) authSchool.value = '행복중학교';
+  if(authGrade && !authGrade.value) authGrade.value = '2';
   updatePreview();
   renderAll();
 });
