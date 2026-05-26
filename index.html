@@ -1,1253 +1,2540 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
 <title>SFE – School Facilities Equipment</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blue: #3B5BFA;
-    --blue-light: #6B8EFF;
-    --orange: #FF6B35;
-    --yellow: #FFD43B;
-    --dark: #0A0A14;
-    --mid: #1A1A2E;
-    --gray: #6B7280;
-    --light: #F8F9FF;
-    --card: #FFFFFF;
-    --border: #E5E7F0;
-    --risk-high: #EF4444;
-    --risk-mid: #F59E0B;
-    --risk-low: #10B981;
+  :root{
+    --bg:#f5f7ff;
+    --panel:#ffffff;
+    --panel-2:#f8fbff;
+    --line:#e5e8f2;
+    --text:#0f172a;
+    --muted:#64748b;
+    --blue:#3b5bfa;
+    --blue-2:#6b8eff;
+    --navy:#0a0a14;
+    --navy-2:#151632;
+    --green:#10b981;
+    --amber:#f59e0b;
+    --red:#ef4444;
+    --cyan:#06b6d4;
+    --shadow:0 18px 50px rgba(15,23,42,.08);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:'Noto Sans KR',system-ui,-apple-system,sans-serif;
+    background:linear-gradient(180deg,#f7f9ff 0%, #eef3ff 100%);
+    color:var(--text);
+    min-height:100vh;
+  }
+  button,input,select,textarea{font:inherit}
+  a{text-decoration:none;color:inherit}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-thumb{background:#d0d7ea;border-radius:999px}
+  ::-webkit-scrollbar-track{background:transparent}
+
+  .hidden{display:none !important}
+  .wrap{width:min(1440px,100%);margin:0 auto;padding:0 20px}
+  .glass{
+    background:rgba(255,255,255,.72);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.65);
+    box-shadow:var(--shadow);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--light);
-    color: var(--dark);
-    min-height: 100vh;
+  /* ---------- landing ---------- */
+  #landing{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at top left, rgba(107,142,255,.18), transparent 40%),
+      radial-gradient(circle at top right, rgba(255,255,255,.08), transparent 30%),
+      linear-gradient(180deg, #090913 0%, #0c1026 100%);
+    color:#fff;
+  }
+  .topnav{
+    position:sticky; top:0; z-index:40;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(9,9,19,.72);
+    backdrop-filter:blur(14px);
+  }
+  .topnav-inner{
+    height:72px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:14px; min-width:0;
+  }
+  .brand-mark{
+    width:42px;height:42px;border-radius:14px;
+    display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--blue),#7c95ff);
+    color:#fff;font-weight:900;font-family:'Space Mono',monospace;
+    flex:0 0 auto;
+  }
+  .brand-txt{min-width:0}
+  .brand-txt strong{display:block;font-size:17px;line-height:1.1}
+  .brand-txt span{display:block;color:rgba(255,255,255,.54);font-size:11px;letter-spacing:2px;margin-top:2px}
+  .nav-links{
+    display:flex; align-items:center; gap:22px;
+    color:rgba(255,255,255,.72); font-size:14px;
+    flex-wrap:wrap;
+  }
+  .nav-links a{cursor:pointer}
+  .nav-links a:hover{color:#fff}
+  .nav-actions{display:flex;align-items:center;gap:10px}
+  .btn{
+    border:0; cursor:pointer; border-radius:14px;
+    padding:12px 16px; font-weight:700;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn.primary{
+    background:linear-gradient(135deg,var(--blue),var(--blue-2));
+    color:#fff; box-shadow:0 10px 25px rgba(59,91,250,.25);
+  }
+  .btn.dark{
+    background:#10132d;color:#fff;border:1px solid rgba(255,255,255,.08)
+  }
+  .btn.ghost{
+    background:transparent;color:rgba(255,255,255,.82);
+    border:1px solid rgba(255,255,255,.16)
   }
 
-  /* ── LANDING ── */
-  #landing {
-    min-height: 100vh;
-    background: var(--dark);
-    display: flex;
-    flex-direction: column;
+  .hero{
+    padding:44px 0 28px;
+    min-height:calc(100vh - 72px);
+    display:flex; align-items:center;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:center;
+    width:100%;
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:8px 14px;border-radius:999px;
+    color:#dbe4ff;background:rgba(59,91,250,.14);
+    border:1px solid rgba(107,142,255,.24);
+    font-size:12px;font-weight:700;letter-spacing:1px
+  }
+  .pulse{width:8px;height:8px;border-radius:50%;background:#8cb1ff;box-shadow:0 0 0 0 rgba(140,177,255,.7);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(140,177,255,.6)}70%{box-shadow:0 0 0 10px rgba(140,177,255,0)}100%{box-shadow:0 0 0 0 rgba(140,177,255,0)}}
+  .hero h1{
+    margin:18px 0 18px;
+    font-size:clamp(40px,6vw,72px);
+    line-height:1.06; letter-spacing:-1.8px;
+  }
+  .hero h1 .accent{color:#89a3ff}
+  .hero h1 .mutedline{display:block;color:rgba(255,255,255,.38);font-size:clamp(22px,3vw,42px);font-weight:900;margin-top:8px}
+  .hero p{
+    margin:0;
+    max-width:620px;
+    color:rgba(255,255,255,.64);
+    line-height:1.9;
+    font-size:16px;
+  }
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+  .shortcut-row{
+    display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;
+  }
+  .shortcut{
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.04);
+    color:#fff;
+    padding:12px 14px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:700;
+  }
+  .shortcut:hover{background:rgba(255,255,255,.08)}
+  .hero-panel{
+    padding:22px;
+    border-radius:28px;
+    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 25px 80px rgba(0,0,0,.28);
+  }
+  .hero-stats{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:14px;
+  }
+  .metric{
+    padding:18px; border-radius:22px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .metric strong{display:block;font-family:'Space Mono',monospace;font-size:34px;line-height:1}
+  .metric span{display:block;color:rgba(255,255,255,.58);font-size:13px;margin-top:8px;line-height:1.5}
+  .metric.highlight{
+    background:linear-gradient(135deg, rgba(59,91,250,.28), rgba(59,91,250,.1));
+    border-color:rgba(137,163,255,.32);
   }
 
-  .land-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 48px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+  .section{
+    padding:26px 0 42px;
+  }
+  .section.dark{
+    background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+    border-top:1px solid rgba(255,255,255,.06);
+    border-bottom:1px solid rgba(255,255,255,.04);
+  }
+  .section-head{
+    margin-bottom:18px;
+  }
+  .section-kicker{
+    font-size:11px; letter-spacing:4px; font-family:'Space Mono',monospace;
+    color:#89a3ff; margin-bottom:10px; text-transform:uppercase;
+  }
+  .section-title{
+    margin:0;
+    font-size:clamp(26px,3vw,40px);
+    line-height:1.18;
+    letter-spacing:-.8px;
+    color:#fff;
+  }
+  .section-sub{
+    margin:10px 0 0;
+    color:rgba(255,255,255,.62);
+    line-height:1.8;
+    max-width:860px;
+  }
+  .card-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+  }
+  .feature-card{
+    padding:24px; border-radius:24px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    min-height:212px;
+  }
+  .feature-card h3{margin:12px 0 10px;font-size:18px;color:#fff}
+  .feature-card p{margin:0;color:rgba(255,255,255,.64);line-height:1.8;font-size:14px}
+  .feature-index{
+    width:46px;height:46px;border-radius:16px;
+    display:grid;place-items:center;
+    background:rgba(59,91,250,.16);
+    color:#b7c6ff;font-weight:900;font-family:'Space Mono',monospace;
+  }
+  .feature-icon{font-size:22px}
+
+  /* ---------- app ---------- */
+  #app{
+    display:none;
+    min-height:100vh;
+    background:linear-gradient(180deg,#f8fbff 0%, #eef4ff 100%);
+  }
+  .app-shell{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    min-height:100vh;
+  }
+  .sidebar{
+    position:sticky; top:0;
+    height:100vh;
+    background:linear-gradient(180deg,#0a0a14 0%, #10142b 100%);
+    color:#fff;
+    padding:18px 14px;
+    border-right:1px solid rgba(255,255,255,.06);
+    overflow:auto;
+  }
+  .sidebar .brand{padding:8px 8px 18px}
+  .sidebar .brand-txt span{color:rgba(255,255,255,.36)}
+  .side-nav{
+    display:flex;flex-direction:column;gap:6px;margin-top:10px
+  }
+  .side-label{
+    padding:10px 12px 4px;
+    color:rgba(255,255,255,.32);
+    font-size:11px;
+    letter-spacing:3px;
+    font-family:'Space Mono',monospace;
+  }
+  .nav-item{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 12px;
+    border-radius:16px;
+    color:rgba(255,255,255,.72);
+    cursor:pointer;
+    transition:background .18s ease, transform .18s ease, color .18s ease;
+    user-select:none;
+  }
+  .nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+  .nav-item.active{
+    background:linear-gradient(135deg, rgba(59,91,250,.26), rgba(59,91,250,.1));
+    color:#dbe4ff;
+    box-shadow:inset 0 0 0 1px rgba(137,163,255,.12);
+  }
+  .nav-ico{
+    width:24px;height:24px;display:grid;place-items:center;
+    font-size:17px;
+  }
+  .nav-item span{font-size:14px;font-weight:600}
+  .sidebar-card{
+    margin-top:16px;
+    padding:16px;
+    border-radius:20px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .sidebar-card .mini{font-size:12px;color:rgba(255,255,255,.55);line-height:1.7}
+  .content{
+    min-width:0;
+    padding:24px;
+    padding-top:30px;
+  }
+  .topbar{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    margin-bottom:18px;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .title-block h2{margin:0;font-size:28px;letter-spacing:-.8px}
+  .title-block p{margin:6px 0 0;color:var(--muted);line-height:1.6}
+  .topbar-right{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  .chip{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 14px;border-radius:999px;
+    background:#fff;border:1px solid var(--line);
+    color:var(--muted);
+    box-shadow:0 10px 24px rgba(15,23,42,.04);
+    font-size:13px;font-weight:700;
+  }
+  .chip .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .btn.sm{padding:11px 14px;border-radius:14px;font-size:13px}
+  .btn.secondary{
+    background:#fff;color:var(--text);border:1px solid var(--line)
+  }
+  .btn.secondary:hover{box-shadow:0 10px 24px rgba(15,23,42,.06)}
+
+  .page{display:none}
+  .page.active{display:block}
+
+  .grid-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+  .kpi{
+    background:rgba(255,255,255,.88);
+    border:1px solid rgba(226,232,240,.9);
+    border-radius:24px;
+    padding:18px;
+    box-shadow:0 12px 30px rgba(15,23,42,.05);
+    overflow:hidden;
+    position:relative;
+  }
+  .kpi .label{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.2px}
+  .kpi .value{
+    margin-top:8px;
+    font-size:30px;
+    font-weight:900;
+    font-family:'Space Mono',monospace;
+    line-height:1.1;
+  }
+  .kpi .meta{margin-top:8px;font-size:12px;color:var(--muted);line-height:1.6}
+  .kpi .icon{
+    position:absolute;right:16px;top:16px;
+    width:44px;height:44px;border-radius:16px;
+    display:grid;place-items:center;font-size:20px;
+    background:linear-gradient(135deg,#eef3ff,#f8fbff)
+  }
+  .kpi.positive .value{color:var(--green)}
+  .kpi.warning .value{color:var(--amber)}
+  .kpi.danger .value{color:var(--red)}
+  .kpi.info .value{color:var(--blue)}
+
+  .grid-2{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+  .grid-2.rev{grid-template-columns:1fr 1fr}
+  .panel{
+    background:rgba(255,255,255,.88);
+    border:1px solid rgba(226,232,240,.95);
+    border-radius:28px;
+    box-shadow:0 14px 34px rgba(15,23,42,.05);
+    padding:20px;
+    min-width:0;
+  }
+  .panel-head{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .panel-title{margin:0;font-size:17px;letter-spacing:-.2px}
+  .panel-sub{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
+  .link-btn{
+    border:0;background:transparent;color:var(--blue);font-weight:800;cursor:pointer;
+    font-size:13px;padding:0
   }
 
-  .logo {
-    display: flex; align-items: center; gap: 12px;
+  /* dashboard */
+  .risk-list{display:flex;flex-direction:column;gap:12px}
+  .risk-row{
+    display:grid;
+    grid-template-columns:minmax(150px,1.4fr) 1fr 64px 90px;
+    gap:10px;
+    align-items:center;
+    padding:12px 14px;border-radius:18px;
+    background:linear-gradient(180deg,#fff,#fbfdff);
+    border:1px solid var(--line);
   }
-  .logo-box {
-    width: 40px; height: 40px; background: var(--blue);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Mono', monospace;
-    font-weight: 700; font-size: 13px; color: #fff;
+  .risk-name{font-weight:700}
+  .risk-sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .progress{
+    height:10px;border-radius:999px;background:#e9eefb;overflow:hidden;
   }
-  .logo-text { font-size: 18px; font-weight: 700; color: #fff; }
-  .logo-sub { font-size: 10px; color: var(--gray); letter-spacing: 2px; margin-top: 2px; }
+  .progress>div{height:100%;border-radius:999px}
+  .badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    gap:6px;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800;
+    width:max-content;
+  }
+  .b-red{background:#fee2e2;color:#b91c1c}
+  .b-amber{background:#fef3c7;color:#b45309}
+  .b-green{background:#d1fae5;color:#047857}
+  .b-slate{background:#e2e8f0;color:#334155}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+  .repair-list{display:flex;flex-direction:column;gap:10px}
+  .repair-item{
+    display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;
+    padding:12px 14px;border-radius:18px;background:#fff;border:1px solid var(--line)
+  }
+  .ava{
+    width:40px;height:40px;border-radius:14px;display:grid;place-items:center;
+    background:#eef3ff;font-size:18px
+  }
+  .repair-name{font-weight:800}
+  .repair-sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .small-tag{
+    padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800
+  }
+  .st-wait{background:#fee2e2;color:#b91c1c}
+  .st-ing{background:#dbeafe;color:#1d4ed8}
+  .st-done{background:#d1fae5;color:#047857}
 
-  .land-nav-links { display: flex; gap: 32px; }
-  .land-nav-links a {
-    color: rgba(255,255,255,0.6); text-decoration: none;
-    font-size: 14px; transition: color .2s;
-    cursor: pointer;
+  .mini-legend{
+    display:flex;gap:12px;flex-wrap:wrap;
+    margin-top:14px;color:var(--muted);font-size:12px
   }
-  .land-nav-links a:hover { color: #fff; }
-
-  .btn-primary {
-    background: var(--blue); color: #fff;
-    border: none; padding: 12px 28px; border-radius: 8px;
-    font-size: 14px; font-weight: 700; cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: all .2s;
+  .mini-legend span{display:inline-flex;align-items:center;gap:6px}
+  .mini-legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .chart-wrap{display:flex;align-items:flex-end;gap:10px;height:260px;margin-top:14px}
+  .bar-col{
+    flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%
   }
-  .btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
-
-  .land-hero {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding: 80px 48px;
-    gap: 80px;
+  .bar{
+    width:100%;border-radius:16px 16px 10px 10px;
+    background:linear-gradient(180deg, #7c95ff, var(--blue));
+    min-height:14px;box-shadow:0 14px 24px rgba(59,91,250,.14)
   }
-
-  .hero-left { flex: 1; }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(59,91,250,0.15); border: 1px solid rgba(59,91,250,0.3);
-    border-radius: 100px; padding: 6px 16px;
-    color: var(--blue-light); font-size: 12px; font-weight: 500;
-    margin-bottom: 32px; letter-spacing: 1px;
-  }
-  .pulse { width: 6px; height: 6px; background: var(--blue-light); border-radius: 50%; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
-
-  .hero-title {
-    font-size: 62px; font-weight: 900; line-height: 1.1;
-    color: #fff; margin-bottom: 24px;
-  }
-  .hero-title .accent { color: var(--blue-light); }
-  .hero-title .line2 { color: rgba(255,255,255,0.4); font-size: 44px; }
-
-  .hero-desc {
-    color: rgba(255,255,255,0.5); font-size: 16px; line-height: 1.8;
-    margin-bottom: 48px; max-width: 480px;
-  }
-
-  .hero-actions { display: flex; gap: 16px; align-items: center; }
-  .btn-outline {
-    background: transparent; color: rgba(255,255,255,0.7);
-    border: 1px solid rgba(255,255,255,0.2); padding: 12px 28px;
-    border-radius: 8px; font-size: 14px; cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif; transition: all .2s;
-  }
-  .btn-outline:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
-
-  .hero-right { flex: 1; }
-  .hero-stats {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-  }
-  .stat-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px; padding: 24px;
-    transition: all .3s;
-  }
-  .stat-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(59,91,250,0.3); }
-  .stat-num { font-size: 36px; font-weight: 900; color: #fff; font-family: 'Space Mono', monospace; }
-  .stat-num .unit { font-size: 16px; color: var(--blue-light); }
-  .stat-label { color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 8px; }
-  .stat-card.highlight { background: rgba(59,91,250,0.15); border-color: rgba(59,91,250,0.4); }
-
-  .land-problems {
-    padding: 80px 48px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.02);
-  }
-  .section-label {
-    font-size: 11px; letter-spacing: 3px; color: var(--blue-light);
-    font-family: 'Space Mono', monospace; margin-bottom: 16px;
-  }
-  .section-title { font-size: 36px; font-weight: 900; color: #fff; margin-bottom: 48px; }
-
-  .problems-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
-  .prob-card {
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px; padding: 32px;
-  }
-  .prob-num { font-size: 48px; font-weight: 900; color: rgba(255,255,255,0.05); font-family: 'Space Mono', monospace; margin-bottom: -8px; }
-  .prob-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-  .prob-desc { color: rgba(255,255,255,0.45); font-size: 14px; line-height: 1.7; }
-
-  /* ── APP SHELL ── */
-  #app { display: none; min-height: 100vh; }
-
-  .app-layout { display: flex; }
-  .sidebar {
-    width: 240px; min-height: 100vh; background: var(--dark);
-    padding: 24px 0; position: fixed; left: 0; top: 0;
-    display: flex; flex-direction: column;
-  }
-  .sidebar-logo {
-    display: flex; align-items: center; gap: 10px;
-    padding: 0 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.06);
-    margin-bottom: 24px;
-  }
-  .sidebar-logo .logo-box { width: 32px; height: 32px; font-size: 10px; }
-  .sidebar-logo .logo-text { font-size: 16px; color: #fff; }
-
-  .nav-section { padding: 0 12px; margin-bottom: 8px; }
-  .nav-section-label {
-    font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 2px;
-    padding: 0 8px; margin-bottom: 4px;
-  }
-  .nav-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 10px 12px; border-radius: 8px;
-    color: rgba(255,255,255,0.5); font-size: 14px;
-    cursor: pointer; transition: all .2s; margin-bottom: 2px;
-  }
-  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
-  .nav-item.active { background: rgba(59,91,250,0.2); color: var(--blue-light); }
-  .nav-icon { width: 18px; text-align: center; font-size: 16px; }
-
-  .main-content {
-    margin-left: 240px; flex: 1; padding: 32px;
-    min-height: 100vh;
+  .bar-label{margin-top:10px;font-size:12px;color:var(--muted)}
+  .bar-val{margin-top:6px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:#334155}
+  .dash-grid{
+    display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:14px
   }
 
-  .page { display: none; }
-  .page.active { display: block; }
+  /* facility table page */
+  .filters{
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px
+  }
+  .seg{
+    border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px;
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .seg .chip-btn{
+    border:0;background:transparent;padding:10px 14px;border-radius:999px;cursor:pointer;
+    color:var(--muted);font-weight:800
+  }
+  .seg .chip-btn.active{background:#eef3ff;color:var(--blue)}
+  .search{
+    flex:1;min-width:220px;
+    border:1px solid var(--line);background:#fff;padding:14px 16px;border-radius:18px;
+    box-shadow:0 10px 24px rgba(15,23,42,.04)
+  }
+  .table-panel{padding:0;overflow:hidden}
+  table{width:100%;border-collapse:separate;border-spacing:0}
+  th,td{padding:14px 16px;text-align:left;vertical-align:middle}
+  th{
+    position:sticky;top:0;background:#f8fbff;border-bottom:1px solid var(--line);
+    font-size:12px;color:var(--muted);letter-spacing:.4px;z-index:1
+  }
+  td{border-bottom:1px solid #edf1fb;font-size:13px}
+  tr:hover td{background:#fbfdff}
+  .fac-name{font-weight:800}
+  .fac-id{font-family:'Space Mono',monospace;color:var(--muted);font-size:11px;margin-top:2px}
+  .inline-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .mini-btn{
+    border:1px solid var(--line);background:#fff;color:var(--text);
+    border-radius:12px;padding:9px 11px;cursor:pointer;font-size:12px;font-weight:800
+  }
+  .mini-btn:hover{border-color:rgba(59,91,250,.25);color:var(--blue)}
+  .status-pill{
+    display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;
+    font-size:12px;font-weight:900
+  }
+  .p-ok{background:#d1fae5;color:#047857}
+  .p-check{background:#fef3c7;color:#b45309}
+  .p-repair{background:#dbeafe;color:#1d4ed8}
+  .p-done{background:#e2e8f0;color:#334155}
 
-  /* ── DASHBOARD ── */
-  .top-bar {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 32px;
+  /* prediction page */
+  .ai-hero{
+    padding:22px;
+    border-radius:30px;
+    background:linear-gradient(135deg, #111428 0%, #1b2451 50%, #0b1229 100%);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:0 18px 52px rgba(10,10,20,.2)
   }
-  .page-title { font-size: 24px; font-weight: 700; }
-  .page-sub { font-size: 14px; color: var(--gray); margin-top: 2px; }
-  .date-badge {
-    background: #fff; border: 1px solid var(--border);
-    padding: 8px 16px; border-radius: 8px; font-size: 13px; color: var(--gray);
-    font-family: 'Space Mono', monospace;
+  .ai-hero-grid{
+    display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center
+  }
+  .ai-icon{
+    width:70px;height:70px;border-radius:24px;
+    display:grid;place-items:center;
+    background:rgba(255,255,255,.09);font-size:32px
+  }
+  .ai-hero h3{margin:0;font-size:23px}
+  .ai-hero p{margin:8px 0 0;color:rgba(255,255,255,.7);line-height:1.75;font-size:14px;max-width:740px}
+  .update-box{
+    text-align:right;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
+    padding:12px 14px;border-radius:18px
+  }
+  .update-box span{display:block;color:rgba(255,255,255,.56);font-size:12px}
+  .update-box strong{font-family:'Space Mono',monospace;font-size:18px}
+  .pred-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:14px
+  }
+  .pred-card{
+    background:rgba(255,255,255,.9);
+    border:1px solid rgba(226,232,240,.9);
+    border-radius:28px;
+    padding:20px;
+    box-shadow:0 14px 30px rgba(15,23,42,.05);
+    position:relative;
+    overflow:hidden;
+  }
+  .pred-card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:5px;
+  }
+  .pred-card.high::before{background:var(--red)}
+  .pred-card.mid::before{background:var(--amber)}
+  .pred-card.low::before{background:var(--green)}
+  .pred-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .pred-name{font-size:18px;font-weight:900;letter-spacing:-.2px}
+  .pred-loc{color:var(--muted);font-size:13px;margin-top:6px}
+  .score-box{display:flex;align-items:flex-end;gap:10px;margin-top:16px}
+  .score{
+    font-size:46px;font-weight:900;line-height:1;font-family:'Space Mono',monospace
+  }
+  .score.high{color:var(--red)}
+  .score.mid{color:var(--amber)}
+  .score.low{color:var(--green)}
+  .score-unit{font-size:18px;color:#64748b;font-weight:700}
+  .pred-meta{
+    display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:12px
+  }
+  .pred-footer{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap}
+  .alert-btn{
+    border:0;padding:11px 14px;border-radius:14px;cursor:pointer;
+    background:#111428;color:#fff;font-weight:800
+  }
+  .alert-btn:hover{background:var(--blue)}
+  .notes{
+    color:#475569;font-size:12px;line-height:1.7
   }
 
-  .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 28px; }
-  .kpi-card {
-    background: #fff; border: 1px solid var(--border);
-    border-radius: 16px; padding: 24px;
-    display: flex; align-items: center; gap: 16px;
-    transition: all .2s;
+  /* report page */
+  .form-layout{
+    display:grid;grid-template-columns:1fr .9fr;gap:14px;align-items:start
   }
-  .kpi-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
-  .kpi-icon {
-    width: 48px; height: 48px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
+  .form-card{
+    background:rgba(255,255,255,.9);
+    border:1px solid rgba(226,232,240,.9);
+    border-radius:28px;
+    padding:20px;
+    box-shadow:0 14px 30px rgba(15,23,42,.05);
   }
-  .kpi-body { flex: 1; }
-  .kpi-num { font-size: 28px; font-weight: 900; font-family: 'Space Mono', monospace; }
-  .kpi-label { font-size: 12px; color: var(--gray); margin-top: 2px; }
-  .kpi-change { font-size: 11px; font-weight: 600; margin-top: 4px; }
-  .up { color: var(--risk-high); }
-  .down { color: var(--risk-low); }
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:800;margin-bottom:8px}
+  .input,.select,.textarea{
+    width:100%;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:16px;
+    padding:14px 16px;
+    color:var(--text);
+    outline:none;
+    transition:border-color .18s ease, box-shadow .18s ease;
+  }
+  .input:focus,.select:focus,.textarea:focus{
+    border-color:rgba(59,91,250,.5);
+    box-shadow:0 0 0 4px rgba(59,91,250,.08)
+  }
+  .textarea{min-height:138px;resize:vertical}
+  .grid-2f{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .mock-box{
+    border:1.5px dashed #c8d4f3;
+    background:linear-gradient(180deg,#fbfdff,#f4f7ff);
+    border-radius:24px;
+    padding:18px;
+  }
+  .mock-area{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:12px;min-height:180px;
+    border-radius:20px;background:#fff;border:1px solid var(--line);
+    text-align:center;
+  }
+  .mock-ico{font-size:38px}
+  .mock-title{font-weight:900;font-size:16px}
+  .mock-sub{color:var(--muted);font-size:13px;line-height:1.7}
+  .file-row{
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px
+  }
+  .preview{
+    margin-top:12px;
+    display:none;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    background:#fff;
+  }
+  .preview img{width:100%;max-height:240px;object-fit:cover;display:block}
+  .analysis{
+    margin-top:14px;
+    border-radius:20px;
+    padding:16px;
+    background:linear-gradient(180deg,#ffffff,#f8fbff);
+    border:1px solid var(--line);
+  }
+  .analysis h4{margin:0 0 8px;font-size:15px}
+  .analysis p{margin:0;color:var(--muted);line-height:1.75;font-size:13px}
+  .recommend{
+    display:grid;gap:10px;margin-top:14px
+  }
+  .rec-item{
+    display:flex;justify-content:space-between;gap:10px;align-items:center;
+    padding:12px 14px;border-radius:16px;background:#fff;border:1px solid var(--line)
+  }
+  .rec-item strong{display:block}
+  .rec-item span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+  .qr-btns{display:flex;gap:10px;flex-wrap:wrap}
+  .big-btn{
+    width:100%;
+    border:0;cursor:pointer;border-radius:18px;
+    padding:16px 18px;font-weight:900;font-size:15px;
+    background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;
+    box-shadow:0 14px 28px rgba(59,91,250,.22)
+  }
+  .big-btn:hover{transform:translateY(-1px)}
+  .big-btn.dark{background:#111428}
+  .muted-note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.7}
 
-  .dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
-  .card {
-    background: #fff; border: 1px solid var(--border);
-    border-radius: 16px; padding: 24px;
+  /* budget page */
+  .budget-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .money-card{
+    padding:18px;border-radius:26px;background:#fff;border:1px solid var(--line);box-shadow:0 12px 26px rgba(15,23,42,.05)
   }
-  .card-title { font-size: 15px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
-  .card-title a { font-size: 12px; color: var(--blue); cursor: pointer; font-weight: 500; }
+  .money-card .k{color:var(--muted);font-size:12px;font-weight:800}
+  .money-card .v{
+    margin-top:10px;font-size:28px;font-weight:900;font-family:'Space Mono',monospace
+  }
+  .money-card .f{margin-top:8px;font-size:12px;color:var(--muted);line-height:1.6}
+  .money-card .bar{height:10px;margin-top:12px;background:#e9eefb;border-radius:999px;overflow:hidden}
+  .money-card .bar>div{height:100%;border-radius:999px}
+  .money-card.total .v{color:#0f172a}
+  .money-card.spent .v{color:var(--blue)}
+  .money-card.remain .v{color:var(--green)}
+  .budget-visual{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px
+  }
+  .donut-box{
+    display:flex;align-items:center;justify-content:center;min-height:350px
+  }
+  .donut-wrap{
+    width:min(320px,100%);
+  }
+  .donut-legend{display:grid;gap:10px}
+  .legend{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:12px 14px;border-radius:16px;background:#fff;border:1px solid var(--line)
+  }
+  .legend-left{display:flex;align-items:center;gap:10px}
+  .legend-dot{width:11px;height:11px;border-radius:3px}
+  .legend small{display:block;color:var(--muted);margin-top:2px}
 
-  /* Risk bars */
-  .risk-list { display: flex; flex-direction: column; gap: 14px; }
-  .risk-item { display: flex; align-items: center; gap: 12px; }
-  .risk-name { width: 120px; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .risk-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-  .risk-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
-  .risk-pct { width: 36px; text-align: right; font-size: 13px; font-weight: 700; font-family: 'Space Mono', monospace; }
-  .tag {
-    padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+  /* analytics page */
+  .analytics-grid{
+    display:grid;grid-template-columns:1.2fr .8fr;gap:14px
   }
-  .tag.high { background: #FEE2E2; color: var(--risk-high); }
-  .tag.mid { background: #FEF3C7; color: #D97706; }
-  .tag.low { background: #D1FAE5; color: var(--risk-low); }
+  .big-chart{
+    height:360px;
+    display:flex;align-items:flex-end;gap:12px;
+    margin-top:12px;
+  }
+  .big-bar-col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+  .big-bar{
+    width:100%;
+    min-height:18px;
+    border-radius:20px 20px 12px 12px;
+    background:linear-gradient(180deg, #8bb2ff 0%, var(--blue) 100%);
+    box-shadow:0 16px 30px rgba(59,91,250,.14)
+  }
+  .axis{
+    display:flex;justify-content:space-between;gap:10px;margin-top:12px;color:var(--muted);font-size:12px
+  }
+  .line-plot{
+    height:300px;
+    border-radius:22px;
+    background:linear-gradient(180deg,#fff,#fbfdff);
+    border:1px solid var(--line);
+    padding:16px;
+    margin-top:12px;
+  }
+  .line-svg{width:100%;height:100%}
+  .stat-list{display:grid;gap:10px;margin-top:12px}
+  .stat-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:12px 14px;border-radius:16px;background:#fff;border:1px solid var(--line)
+  }
+  .stat-row strong{font-family:'Space Mono',monospace}
 
-  /* Recent repairs */
-  .repair-list { display: flex; flex-direction: column; gap: 12px; }
-  .repair-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px; border-radius: 10px; background: var(--light);
-    border: 1px solid var(--border);
+  /* assistant */
+  .chat-wrap{
+    display:grid;grid-template-columns:1fr .7fr;gap:14px
   }
-  .repair-avatar {
-    width: 36px; height: 36px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
+  .chat-box{
+    display:flex;flex-direction:column;height:calc(100vh - 190px);min-height:540px;
   }
-  .repair-info { flex: 1; }
-  .repair-name { font-size: 13px; font-weight: 600; }
-  .repair-loc { font-size: 11px; color: var(--gray); margin-top: 2px; }
-  .repair-status {
-    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  .chat-messages{
+    flex:1;
+    overflow:auto;
+    padding:6px 2px 12px;
+    display:flex;flex-direction:column;gap:10px;
   }
-  .s-done { background: #D1FAE5; color: var(--risk-low); }
-  .s-ing { background: #DBEAFE; color: #2563EB; }
-  .s-wait { background: #FEE2E2; color: var(--risk-high); }
+  .bubble{
+    max-width:min(82%,680px);
+    padding:12px 14px;border-radius:18px;
+    line-height:1.7;font-size:14px;
+    border:1px solid var(--line);
+    box-shadow:0 8px 18px rgba(15,23,42,.04);
+    white-space:pre-wrap;
+  }
+  .bubble.me{align-self:flex-end;background:#eef3ff;border-color:#d8e2ff}
+  .bubble.bot{align-self:flex-start;background:#fff}
+  .chat-input{
+    display:flex;gap:10px;margin-top:12px
+  }
+  .chat-input input{
+    flex:1;border-radius:18px;padding:15px 16px;border:1px solid var(--line)
+  }
+  .qa-grid{display:grid;gap:10px}
+  .qa-card{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px
+  }
+  .qa-card strong{display:block;margin-bottom:6px}
+  .qa-card p{margin:0;color:var(--muted);line-height:1.7;font-size:13px}
 
-  /* Chart */
-  .mini-chart { height: 120px; display: flex; align-items: flex-end; gap: 8px; padding-top: 8px; }
-  .bar-group { flex: 1; display: flex; align-items: flex-end; gap: 3px; flex-direction: column; }
-  .chart-bar {
-    width: 100%; border-radius: 4px 4px 0 0;
-    transition: height .6s ease;
+  /* faq */
+  .faq-grid{display:grid;gap:12px}
+  details{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 16px;box-shadow:0 10px 24px rgba(15,23,42,.04)
   }
-  .chart-labels { display: flex; justify-content: space-between; margin-top: 8px; }
-  .chart-label { font-size: 10px; color: var(--gray); text-align: center; flex: 1; }
+  summary{cursor:pointer;font-weight:900;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  details p{margin:10px 0 0;color:var(--muted);line-height:1.8;font-size:13px}
 
-  /* ── FACILITY LIST ── */
-  .filter-bar {
-    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; align-items: center;
+  /* modal / toast */
+  .overlay{
+    position:fixed;inset:0;background:rgba(2,6,23,.54);
+    display:none;align-items:center;justify-content:center;z-index:1000;
+    padding:18px;
   }
-  .filter-btn {
-    padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
-    border: 1px solid var(--border); background: #fff; cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif; transition: all .2s; color: var(--dark);
+  .overlay.open{display:flex}
+  .modal{
+    width:min(720px,100%);
+    max-height:min(86vh,960px);
+    overflow:auto;
+    background:#fff;border-radius:28px;
+    box-shadow:0 30px 70px rgba(0,0,0,.26);
+    border:1px solid rgba(255,255,255,.4);
+    padding:22px;
   }
-  .filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
-  .search-input {
-    padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
-    font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
-    background: #fff; flex: 1; max-width: 280px;
+  .modal-head{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+    margin-bottom:16px
   }
-  .search-input:focus { outline: none; border-color: var(--blue); }
+  .modal-head h3{margin:0;font-size:22px}
+  .modal-head p{margin:6px 0 0;color:var(--muted);line-height:1.7;font-size:13px}
+  .close{
+    border:0;background:#f1f5f9;width:40px;height:40px;border-radius:14px;cursor:pointer;font-size:18px
+  }
+  .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .mfield{
+    padding:12px 14px;border:1px solid var(--line);border-radius:18px;background:#fbfdff
+  }
+  .mfield span{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:.4px}
+  .mfield strong{font-size:14px}
+  .toast{
+    position:fixed;right:20px;bottom:20px;z-index:2000;
+    display:none;align-items:center;gap:10px;
+    background:#0f172a;color:#fff;border-radius:16px;
+    padding:14px 16px;box-shadow:0 16px 40px rgba(2,6,23,.26)
+  }
+  .toast.show{display:flex}
+  .toast .ico{
+    width:28px;height:28px;border-radius:10px;background:rgba(255,255,255,.12);
+    display:grid;place-items:center
+  }
 
-  .facility-table { width: 100%; border-collapse: collapse; }
-  .facility-table th {
-    text-align: left; padding: 10px 16px; font-size: 12px; color: var(--gray);
-    font-weight: 600; border-bottom: 2px solid var(--border); letter-spacing: .5px;
+  /* auth / registration */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .tab{
+    border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer;color:var(--muted)
   }
-  .facility-table td {
-    padding: 14px 16px; font-size: 13px; border-bottom: 1px solid var(--border);
-  }
-  .facility-table tr:hover td { background: var(--light); }
-  .fac-name { font-weight: 600; }
-  .fac-id { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--gray); }
+  .tab.active{background:#eef3ff;color:var(--blue)}
+  .form-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 
-  .risk-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700;
+  /* responsive */
+  @media (max-width: 1180px){
+    .hero-grid,.grid-2,.dash-grid,.form-layout,.analytics-grid,.chat-wrap,.budget-visual{grid-template-columns:1fr}
+    .app-shell{grid-template-columns:88px 1fr}
+    .sidebar .brand-txt,.sidebar span{display:none}
+    .sidebar{padding-inline:10px}
+    .nav-item{justify-content:center}
+    .nav-item span{display:none}
+    .grid-kpi{grid-template-columns:repeat(2,1fr)}
+    .pred-grid,.card-grid,.budget-grid{grid-template-columns:1fr}
   }
-  .rb-high { background: #FEE2E2; color: var(--risk-high); }
-  .rb-mid { background: #FEF3C7; color: #D97706; }
-  .rb-low { background: #D1FAE5; color: var(--risk-low); }
-  .rb-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-
-  .action-btn {
-    padding: 6px 12px; border-radius: 6px; font-size: 12px;
-    border: 1px solid var(--border); background: #fff; cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif; transition: all .2s; font-weight: 600;
-  }
-  .action-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
-
-  /* ── REPORT FORM ── */
-  .report-form { max-width: 680px; }
-  .form-section { margin-bottom: 32px; }
-  .form-section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
-  .form-group { margin-bottom: 16px; }
-  .form-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block; }
-  .form-input, .form-select, .form-textarea {
-    width: 100%; padding: 12px 16px; border: 1px solid var(--border);
-    border-radius: 10px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
-    transition: border-color .2s; background: #fff;
-  }
-  .form-input:focus, .form-select:focus, .form-textarea:focus {
-    outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,91,250,0.1);
-  }
-  .form-textarea { min-height: 120px; resize: vertical; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-  .qr-demo {
-    border: 2px dashed var(--border); border-radius: 12px;
-    padding: 32px; text-align: center; cursor: pointer;
-    transition: all .2s; background: var(--light);
-  }
-  .qr-demo:hover { border-color: var(--blue); background: rgba(59,91,250,0.04); }
-  .qr-icon { font-size: 48px; margin-bottom: 12px; }
-  .qr-text { font-size: 14px; color: var(--gray); }
-
-  .photo-upload {
-    border: 2px dashed var(--border); border-radius: 12px;
-    padding: 40px; text-align: center; cursor: pointer; transition: all .2s;
-  }
-  .photo-upload:hover { border-color: var(--blue); }
-
-  .submit-btn {
-    background: var(--blue); color: #fff; border: none;
-    padding: 16px 40px; border-radius: 12px; font-size: 16px; font-weight: 700;
-    cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
-    width: 100%; transition: all .2s; margin-top: 8px;
-  }
-  .submit-btn:hover { background: var(--blue-light); transform: translateY(-1px); }
-
-  /* ── AI PREDICTION ── */
-  .ai-header {
-    background: linear-gradient(135deg, var(--dark) 0%, #1a1a3e 100%);
-    border-radius: 20px; padding: 32px; margin-bottom: 24px;
-    display: flex; align-items: center; gap: 24px;
-  }
-  .ai-icon-big { font-size: 48px; }
-  .ai-title { font-size: 22px; font-weight: 700; color: #fff; }
-  .ai-desc { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 4px; }
-
-  .prediction-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
-  .pred-card {
-    background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px;
-    position: relative; overflow: hidden;
-  }
-  .pred-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-  }
-  .pred-card.high::before { background: var(--risk-high); }
-  .pred-card.mid::before { background: var(--risk-mid); }
-  .pred-card.low::before { background: var(--risk-low); }
-  .pred-item-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-  .pred-location { font-size: 12px; color: var(--gray); margin-bottom: 16px; }
-  .pred-score-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .pred-score { font-size: 36px; font-weight: 900; font-family: 'Space Mono', monospace; }
-  .pred-score.high { color: var(--risk-high); }
-  .pred-score.mid { color: var(--risk-mid); }
-  .pred-score.low { color: var(--risk-low); }
-  .pred-label { font-size: 12px; color: var(--gray); }
-  .pred-bar-wrap { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 16px; }
-  .pred-bar { height: 100%; border-radius: 3px; }
-  .high-bar { background: var(--risk-high); }
-  .mid-bar { background: var(--risk-mid); }
-  .low-bar { background: var(--risk-low); }
-  .pred-meta { display: flex; gap: 16px; }
-  .pred-meta-item { font-size: 12px; color: var(--gray); }
-  .pred-meta-item span { font-weight: 600; color: var(--dark); }
-  .pred-action { margin-top: 16px; }
-  .alert-btn {
-    background: var(--dark); color: #fff; border: none;
-    padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
-    cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all .2s;
-  }
-  .alert-btn:hover { background: var(--blue); }
-
-  /* ── BUDGET ── */
-  .budget-overview {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 24px;
-  }
-  .budget-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
-  .budget-label { font-size: 12px; color: var(--gray); margin-bottom: 8px; }
-  .budget-amount { font-size: 28px; font-weight: 900; font-family: 'Space Mono', monospace; }
-  .budget-amount.total { color: var(--dark); }
-  .budget-amount.used { color: var(--blue); }
-  .budget-amount.remain { color: var(--risk-low); }
-  .budget-bar-outer { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 12px; }
-  .budget-bar-inner { height: 100%; border-radius: 4px; background: var(--blue); }
-
-  .donut-wrap { display: flex; align-items: center; gap: 20px; }
-  .donut-svg { width: 120px; height: 120px; }
-  .donut-legend { display: flex; flex-direction: column; gap: 8px; }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-
-  /* ── MODAL ── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5); z-index: 1000;
-    align-items: center; justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: #fff; border-radius: 20px; padding: 32px;
-    width: 520px; max-width: 90vw; position: relative;
-    animation: slideUp .3s ease;
-  }
-  @keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
-  .modal-close {
-    position: absolute; top: 16px; right: 16px;
-    background: var(--light); border: none; border-radius: 8px;
-    width: 32px; height: 32px; cursor: pointer; font-size: 16px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-  .modal-sub { font-size: 13px; color: var(--gray); margin-bottom: 24px; }
-  .modal-field { margin-bottom: 12px; }
-  .modal-field label { font-size: 11px; color: var(--gray); margin-bottom: 4px; display: block; letter-spacing: .5px; }
-  .modal-field p { font-size: 14px; font-weight: 600; }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 32px; right: 32px;
-    background: var(--dark); color: #fff;
-    padding: 14px 24px; border-radius: 12px; font-size: 14px;
-    display: none; align-items: center; gap: 10px; z-index: 2000;
-    animation: toastIn .3s ease;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  }
-  .toast.show { display: flex; }
-  @keyframes toastIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-  /* ── RESPONSIVE ── */
-  @media(max-width:900px) {
-    .land-nav { padding: 16px 24px; }
-    .land-hero { flex-direction: column; padding: 40px 24px; gap: 40px; }
-    .hero-title { font-size: 40px; }
-    .problems-grid { grid-template-columns: 1fr; }
-    .kpi-grid { grid-template-columns: 1fr 1fr; }
-    .dash-grid { grid-template-columns: 1fr; }
-    .sidebar { width: 64px; }
-    .sidebar-logo .logo-text, .sidebar-logo .logo-sub,
-    .nav-section-label, .nav-item span { display: none; }
-    .main-content { margin-left: 64px; }
-    .prediction-grid { grid-template-columns: 1fr; }
-    .budget-overview { grid-template-columns: 1fr; }
+  @media (max-width: 720px){
+    .topnav-inner{height:auto;padding:12px 0;align-items:flex-start;flex-direction:column}
+    .nav-actions{width:100%;justify-content:flex-start;flex-wrap:wrap}
+    .hero{padding-top:26px;min-height:auto}
+    .hero h1{margin-top:14px}
+    .hero-panel{padding:16px}
+    .hero-stats{grid-template-columns:1fr 1fr}
+    .card-grid,.grid-kpi,.pred-grid,.budget-grid,.form-grid-3,.modal-grid{grid-template-columns:1fr}
+    .app-shell{grid-template-columns:1fr}
+    .sidebar{
+      position:relative;height:auto;display:none;
+    }
+    .content{padding:14px;padding-top:18px}
+    .topbar{padding-top:10px}
+    .grid-2.rev{grid-template-columns:1fr}
+    .risk-row{grid-template-columns:1fr}
+    .chart-wrap{height:220px;gap:8px}
+    .big-chart{height:260px}
+    .chat-box{height:auto;min-height:520px}
   }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ LANDING PAGE ═══════════════ -->
-<div id="landing">
-  <nav class="land-nav">
-    <div class="logo">
-      <div class="logo-box">SFE</div>
+<!-- LANDING -->
+<section id="landing">
+  <div class="topnav">
+    <div class="wrap topnav-inner">
+      <div class="brand">
+        <div class="brand-mark">SFE</div>
+        <div class="brand-txt">
+          <strong>바나나는 새우젓 SFE</strong>
+          <span>SCHOOL FACILITIES EQUIPMENT</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="#problems">문제 배경</a>
+        <a href="#solution">솔루션</a>
+        <a href="#effect">기대 효과</a>
+      </div>
+      <div class="nav-actions">
+        <button class="btn ghost sm" onclick="openAuth('login')">로그인</button>
+        <button class="btn primary sm" onclick="openAuth('signup')">회원가입</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap hero">
+    <div class="hero-grid">
       <div>
-        <div class="logo-text">바나나는새우것 SFE</div>
-        <div class="logo-sub">SCHOOL FACILITIES EQUIPMENT</div>
-      </div>
-    </div>
-    <div class="land-nav-links">
-      <a onclick="scrollToSection('problems')">문제 배경</a>
-      <a onclick="scrollToSection('solution')">솔루션</a>
-      <a onclick="scrollToSection('effect')">기대 효과</a>
-    </div>
-    <button class="btn-primary" onclick="enterApp()">시스템 체험하기 →</button>
-  </nav>
-
-  <!-- Hero -->
-  <div class="land-hero">
-    <div class="hero-left">
-      <div class="hero-badge">
-        <div class="pulse"></div>
-        AI-POWERED SCHOOL MANAGEMENT
-      </div>
-      <h1 class="hero-title">
-        데이터로 지키는<br>
-        <span class="accent">학교의 일상,</span><br>
-        <span class="line2">SFE 시스템</span>
-      </h1>
-      <p class="hero-desc">
-        단순한 기술의 도입을 넘어, 학교의 일상을 안전하게 해주는 실질적인 변화.<br>
-        머신러닝 기반 랜덤 포레스트 모델로 고장을 예측하고, QR 스캔 한 번으로 수리를 신고합니다.
-      </p>
-      <div class="hero-actions">
-        <button class="btn-primary" onclick="enterApp()">대시보드 체험하기</button>
-        <button class="btn-outline" onclick="document.getElementById('problems').scrollIntoView({behavior:'smooth'})">자세히 알아보기</button>
-      </div>
-    </div>
-    <div class="hero-right">
-      <div class="hero-stats">
-        <div class="stat-card highlight">
-          <div class="stat-num">40<span class="unit">%↑</span></div>
-          <div class="stat-label">업무 효율 향상</div>
+        <div class="badge"><span class="pulse"></span> AI-POWERED SCHOOL MANAGEMENT</div>
+        <h1>
+          데이터로 지키는<br>
+          <span class="accent">학교의 일상,</span>
+          <span class="mutedline">SFE 시스템</span>
+        </h1>
+        <p>
+          QR 스캔, 사진 첨부, AI 분석, 예산 집계, 대시보드 연동까지 하나로 이어지는 통합 시설 관리 시스템입니다.
+          신고가 들어오면 상태와 예산이 실시간으로 연결되고, 위험도는 더 정밀하게 예측됩니다.
+        </p>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="enterApp()">대시보드 체험하기</button>
+          <button class="btn dark" onclick="scrollToId('solution')">자세히 보기</button>
         </div>
-        <div class="stat-card">
-          <div class="stat-num">0<span class="unit">원</span></div>
-          <div class="stat-label">추가 센서 도입 비용</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">80<span class="unit">%</span></div>
-          <div class="stat-label">위험도 초과 시 자동 알림</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">3단계</div>
-          <div class="stat-label">신호등 직관적 알림</div>
+        <div class="shortcut-row">
+          <button class="shortcut" onclick="enterApp();showPage('dashboard')">대시보드</button>
+          <button class="shortcut" onclick="enterApp();showPage('facilities')">시설물 현황</button>
+          <button class="shortcut" onclick="enterApp();showPage('report')">수리 신고</button>
+          <button class="shortcut" onclick="enterApp();showPage('assistant')">AI 어시스턴트</button>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Problems -->
-  <div class="land-problems" id="problems">
-    <div class="section-label">01. BACKGROUND</div>
-    <div class="section-title">사후 처리 중심의 현행 시설 관리,<br>무엇이 문제인가?</div>
-    <div class="problems-grid">
-      <div class="prob-card">
-        <div class="prob-num">01</div>
-        <div class="prob-title">🔴 수동적 사후 접수</div>
-        <div class="prob-desc">고장 발생 후 학생과 교사가 직접 행정실에 수기 신고하며, 예산 승인 및 업체 방문까지 긴 대기 시간이 소요된다.</div>
-      </div>
-      <div class="prob-card">
-        <div class="prob-num">02</div>
-        <div class="prob-title">📺 학습권 침해 발생</div>
-        <div class="prob-desc">스마트 칠판 등 첨단 기기 고장 시 수업 흐름이 단절되며, 육안 파악이 힘든 고가 실험 기자재의 방치 위험이 높다.</div>
-      </div>
-      <div class="prob-card">
-        <div class="prob-num">03</div>
-        <div class="prob-title">📊 데이터 기반 예방 부재</div>
-        <div class="prob-desc">고장 나기 전에 미리 예측하는 체계가 없어, 예측 불가능한 수리비로 인한 학교 예산 낭비가 지속되고 있다.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Solution -->
-  <div class="land-problems" id="solution" style="border-top:1px solid rgba(255,255,255,0.06)">
-    <div class="section-label">02. SOLUTION</div>
-    <div class="section-title">SFE가 제안하는 세 가지 해법</div>
-    <div class="problems-grid">
-      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
-        <div class="prob-num" style="color:rgba(59,91,250,0.15)">01</div>
-        <div class="prob-title" style="color:#fff">🤖 지능형 고장 위험도 AI 예측</div>
-        <div class="prob-desc">물품 구매일, 내구연한, 과거 수리 이력을 바탕으로 시설물의 상태를 0%~100%로 시각화. 위험도 80% 초과 시 행정실에 사전 점검 알림을 보내 사고를 예방한다.</div>
-      </div>
-      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
-        <div class="prob-num" style="color:rgba(59,91,250,0.15)">02</div>
-        <div class="prob-title" style="color:#fff">📱 원클릭 스마트 수리 요청 체계</div>
-        <div class="prob-desc">복잡한 서류 절차 대신, 고유 QR코드 스캔과 사진 촬영만으로 간편 접수된다. AI 비전 기술이 파손 유형을 판별해 필요 부품과 소요 예산을 자동으로 산출해 준다.</div>
-      </div>
-      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
-        <div class="prob-num" style="color:rgba(59,91,250,0.15)">03</div>
-        <div class="prob-title" style="color:#fff">💰 데이터 기반 행정 및 예산 최적화</div>
-        <div class="prob-desc">사후 수리 관행에서 탈피해, AI가 제안하는 시설물별 최적 교체 주기를 활용한다. 주먹구구식 집행을 막고 예산을 가장 필요한 곳에 투입시켜 학교 운영의 투명성을 높인다.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Effect -->
-  <div class="land-problems" id="effect">
-    <div class="section-label">03. EFFECT</div>
-    <div class="section-title">SFE가 가져올 교내의 행복한 변화</div>
-    <div class="problems-grid">
-      <div class="prob-card">
-        <div class="prob-num">01</div>
-        <div class="prob-title" style="color:#FFD43B">🎓 학생 – 끊김이 없는 하루</div>
-        <div class="prob-desc">수업 도중 기자재가 갑자기 고장 나 낭비되던 10분이 사라진다. 정밀 장비의 결함을 미리 감지하여 동아리 활동과 과학 실험 등 학생들의 소중한 프로젝트가 무산될 위험을 원천 차단한다.</div>
-      </div>
-      <div class="prob-card">
-        <div class="prob-num">02</div>
-        <div class="prob-title" style="color:#FFD43B">🏫 행정 – 사후 수습의 피로에서 예방의 여유로</div>
-        <div class="prob-desc">고장이 터진 후에야 신고를 받고 수리 업체를 부르던 수동적인 사후 처리 방식에서 벗어난다. 데이터 기반의 교체 주기를 파악해 불필요한 예산 낭비를 막고, 행정실의 업무 피로도를 획기적으로 낮춘다.</div>
-      </div>
-      <div class="prob-card">
-        <div class="prob-num">03</div>
-        <div class="prob-title" style="color:#FFD43B">🚀 미래 – 교과서 속 이론이 삶을 바꾸는 경험으로</div>
-        <div class="prob-desc">단순히 데이터 리터러시를 책으로만 배우는 것을 넘어, 공공데이터와 AI 기술이 우리 학교를 어떻게 더 안전하게 바꾸는지 학생들이 온몸으로 체감한다. 진정한 미래형 스마트 학교의 표준이 된다.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Road Map -->
-  <div class="land-problems">
-    <div class="section-label">07. ROAD MAP</div>
-    <div class="section-title">우리의 아이디어가 <span style="color:var(--blue-light)">학교의 일상</span>이 되기까지</div>
-    <div class="problems-grid">
-      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
-        <div class="prob-num" style="color:rgba(59,91,250,0.1)">P1</div>
-        <div class="prob-title" style="color:var(--blue-light)">PHASE 01. 단기</div>
-        <div class="prob-title" style="color:#fff; font-size:16px; margin-top:8px">교내 시범 테스트 및 UI 고도화</div>
-        <div class="prob-desc" style="margin-top:8px">Claude AI 기반 베타 버전을 해동고, 부산기공, 부경고 실습실에 우선 적용하여 학생과 교직원의 피드백을 수집하고 시스템을 다듬는다.</div>
-      </div>
-      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
-        <div class="prob-num" style="color:rgba(59,91,250,0.1)">P2</div>
-        <div class="prob-title" style="color:var(--blue-light)">PHASE 02. 중기</div>
-        <div class="prob-title" style="color:#fff; font-size:16px; margin-top:8px">부산 교육청 연계 시범 학교 확대</div>
-        <div class="prob-desc" style="margin-top:8px">부산 관내 10개 시범 학교를 선정하고, 실제 유지보수 공공데이터와의 연동을 통해 AI 예측 모델의 신뢰도를 최종 검증한다.</div>
-      </div>
-      <div class="prob-card" style="border-color:rgba(59,91,250,0.3)">
-        <div class="prob-num" style="color:rgba(59,91,250,0.1)">P3</div>
-        <div class="prob-title" style="color:var(--blue-light)">PHASE 03. 장기</div>
-        <div class="prob-title" style="color:#fff; font-size:16px; margin-top:8px">대한민국 학교 지능형 표준 확산</div>
-        <div class="prob-desc" style="margin-top:8px">전국 교육시설 재단 및 데이터 허브와 정식 API 연동을 추진하여 데이터 기반의 예방 중심 학교 관리 시스템을 정착시킨다.</div>
-      </div>
-    </div>
-    <div style="text-align:center; margin-top:48px">
-      <button class="btn-primary" style="padding:16px 48px; font-size:16px" onclick="enterApp()">
-        지금 바로 시스템 체험하기 →
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ APP ═══════════════ -->
-<div id="app">
-  <div class="app-layout">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-logo">
-        <div class="logo-box">SFE</div>
-        <div>
-          <div class="logo-text">SFE</div>
-          <div class="logo-sub" style="font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px">School Facilities</div>
-        </div>
-      </div>
-      <div class="nav-section">
-        <div class="nav-section-label">MAIN</div>
-        <div class="nav-item active" onclick="showPage('dashboard',this)">
-          <div class="nav-icon">📊</div><span>대시보드</span>
-        </div>
-        <div class="nav-item" onclick="showPage('facilities',this)">
-          <div class="nav-icon">🏫</div><span>시설물 관리</span>
-        </div>
-        <div class="nav-item" onclick="showPage('prediction',this)">
-          <div class="nav-icon">🤖</div><span>위험도 예측</span>
-        </div>
-        <div class="nav-item" onclick="showPage('report',this)">
-          <div class="nav-icon">📝</div><span>수리 요청</span>
-        </div>
-        <div class="nav-item" onclick="showPage('budget',this)">
-          <div class="nav-icon">💰</div><span>예산 관리</span>
-        </div>
-      </div>
-      <div class="nav-section" style="margin-top:auto">
-        <div class="nav-item" onclick="backToLanding()">
-          <div class="nav-icon">🏠</div><span>메인으로</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main -->
-    <div class="main-content">
-
-      <!-- Dashboard -->
-      <div class="page active" id="page-dashboard">
-        <div class="top-bar">
-          <div>
-            <div class="page-title">통합 시설물 관리 대시보드</div>
-            <div class="page-sub">행복중학교 · 관리자 김OO</div>
+      <div class="hero-panel">
+        <div class="hero-stats">
+          <div class="metric highlight">
+            <strong>40%↑</strong>
+            <span>업무 효율 향상</span>
           </div>
-          <div class="date-badge" id="dateDisplay"></div>
+          <div class="metric">
+            <strong>0원</strong>
+            <span>추가 센서 도입 비용</span>
+          </div>
+          <div class="metric">
+            <strong>실시간</strong>
+            <span>점검필요·수리중 상태 반영</span>
+          </div>
+          <div class="metric">
+            <strong>보상</strong>
+            <span>신고 기여점수에 따른 리워드</span>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="kpi-icon" style="background:#EFF6FF">🏫</div>
-            <div class="kpi-body">
-              <div class="kpi-num">1,245</div>
-              <div class="kpi-label">전체 시설물</div>
-              <div class="kpi-change" style="color:var(--gray)">전체 시설물 현황</div>
+  <div class="section dark" id="problems">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">01. BACKGROUND</div>
+        <h2 class="section-title">사후 처리 중심의 현행 시설 관리, 무엇이 문제인가?</h2>
+        <p class="section-sub">시설 고장은 발생 뒤 대응하는 순간 비용과 시간이 동시에 늘어납니다. 이 화면은 예측·신고·집계를 한 화면에서 연결해 문제를 줄이기 위한 구조입니다.</p>
+      </div>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-index">01</div>
+          <h3><span class="feature-icon">🔴</span> 수동적 사후 접수</h3>
+          <p>문제가 생긴 뒤에야 신고가 들어오면 확인, 승인, 수리까지 여러 단계가 끊겨 시간이 길어집니다.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-index">02</div>
+          <h3><span class="feature-icon">📺</span> 학습권 침해</h3>
+          <p>스마트 칠판, 프로젝터, 실험 기자재처럼 수업 핵심 장비는 고장 순간 수업 흐름을 바로 무너뜨립니다.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-index">03</div>
+          <h3><span class="feature-icon">📊</span> 예방 데이터 부족</h3>
+          <p>사용연수와 수리 이력, 위치 특성을 함께 보지 않으면 고장 가능성을 미리 가늠하기 어렵습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section dark" id="solution">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">02. SOLUTION</div>
+        <h2 class="section-title">SFE가 제안하는 세 가지 해법</h2>
+      </div>
+      <div class="card-grid">
+        <div class="feature-card" style="background:rgba(255,255,255,.05)">
+          <div class="feature-index">AI</div>
+          <h3><span class="feature-icon">🤖</span> 정밀 위험도 예측</h3>
+          <p>시설 종류별 기대 수명을 따로 계산하고, 사용연수와 수리횟수를 매끄럽게 결합해 위험도를 산출합니다. 비슷한 조건은 비슷한 점수로 이어집니다.</p>
+        </div>
+        <div class="feature-card" style="background:rgba(255,255,255,.05)">
+          <div class="feature-index">QR</div>
+          <h3><span class="feature-icon">📱</span> QR·카메라 신고</h3>
+          <p>QR 코드와 카메라 모의 기능으로 시설을 빠르게 찾고, 사진과 글을 함께 분석해 고장 유형을 자동 제안합니다.</p>
+        </div>
+        <div class="feature-card" style="background:rgba(255,255,255,.05)">
+          <div class="feature-index">B</div>
+          <h3><span class="feature-icon">💰</span> 예산 최적화</h3>
+          <p>예상 수리비, 대기 예산, 실제 집행액을 분리 계산해 잔여 예산을 정확히 보여줍니다. 신고가 늘어도 집계가 흔들리지 않도록 정리했습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section dark" id="effect">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">03. EFFECT</div>
+        <h2 class="section-title">SFE가 가져올 교내의 변화</h2>
+      </div>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-index">01</div>
+          <h3><span class="feature-icon">🎓</span> 학생</h3>
+          <p>수업 중 장비가 갑자기 멈추는 상황을 줄여 학습 흐름이 끊기지 않도록 돕습니다.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-index">02</div>
+          <h3><span class="feature-icon">🏫</span> 행정</h3>
+          <p>접수된 신고와 완료된 수리를 같은 데이터 흐름에서 보면서 업무 우선순위를 쉽게 조정할 수 있습니다.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-index">03</div>
+          <h3><span class="feature-icon">🚀</span> 미래</h3>
+          <p>공공데이터와 AI가 학교를 어떻게 바꾸는지 직접 확인하는 실습형 시스템으로 확장할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="app">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">SFE</div>
+        <div class="brand-txt">
+          <strong>SFE</strong>
+          <span>Integrated Facility Ops</span>
+        </div>
+      </div>
+
+      <div class="side-nav">
+        <div class="side-label">MAIN</div>
+        <div class="nav-item active" data-page="dashboard"><div class="nav-ico">📊</div><span>대시보드</span></div>
+        <div class="nav-item" data-page="facilities"><div class="nav-ico">🏫</div><span>시설물 현황</span></div>
+        <div class="nav-item" data-page="prediction"><div class="nav-ico">🤖</div><span>위험도 예측</span></div>
+        <div class="nav-item" data-page="report"><div class="nav-ico">📝</div><span>수리 신고</span></div>
+        <div class="nav-item" data-page="budget"><div class="nav-ico">💰</div><span>예산 관리</span></div>
+        <div class="nav-item" data-page="analytics"><div class="nav-ico">📈</div><span>통계 분석</span></div>
+        <div class="nav-item" data-page="assistant"><div class="nav-ico">💬</div><span>AI 어시스턴트</span></div>
+        <div class="nav-item" data-page="faq"><div class="nav-ico">❓</div><span>FAQ</span></div>
+
+        <div class="side-label">ACTION</div>
+        <div class="nav-item" onclick="backToLanding()"><div class="nav-ico">🏠</div><span>메인으로</span></div>
+      </div>
+
+      <div class="sidebar-card">
+        <div style="font-weight:900;margin-bottom:6px">빠른 도움</div>
+        <div class="mini">QR 신고, 사진 AI 분석, 시설 등록, 예산 집계, 챗봇 답변이 모두 같은 상태값을 공유합니다.</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <div class="title-block">
+          <h2 id="pageTitle">통합 시설 관리 대시보드</h2>
+          <p id="pageDesc">점검필요, 수리중, 수리완료 상태를 실시간으로 묶어 보여줍니다.</p>
+        </div>
+        <div class="topbar-right">
+          <button class="btn secondary sm" onclick="openAuth('login')">로그인</button>
+          <button class="btn primary sm" onclick="openAuth('signup')">회원가입</button>
+        </div>
+      </div>
+
+      <!-- dashboard -->
+      <section class="page active" id="page-dashboard">
+        <div class="grid-kpi" id="dashboardKpi"></div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">고장 위험도 TOP 5</h3>
+                <p class="panel-sub">정밀 알고리즘으로 계산된 상위 위험 시설입니다.</p>
+              </div>
+              <button class="link-btn" onclick="showPage('prediction')">위험도 예측 화면으로 →</button>
             </div>
+            <div class="risk-list" id="topRiskList"></div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-icon" style="background:#D1FAE5">✅</div>
-            <div class="kpi-body">
-              <div class="kpi-num">1,102</div>
-              <div class="kpi-label">정상 운영</div>
-              <div class="kpi-change down">88.5% 정상</div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">최근 처리 현황</h3>
+                <p class="panel-sub">접수, 수리중, 수리완료가 한눈에 보입니다.</p>
+              </div>
             </div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-icon" style="background:#FEF3C7">⚠️</div>
-            <div class="kpi-body">
-              <div class="kpi-num">98</div>
-              <div class="kpi-label">점검 필요</div>
-              <div class="kpi-change up">7.9% 주의</div>
-            </div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-icon" style="background:#FEE2E2">🔧</div>
-            <div class="kpi-body">
-              <div class="kpi-num">45</div>
-              <div class="kpi-label">수리 중</div>
-              <div class="kpi-change up">3.6% 수리중</div>
-            </div>
+            <div class="repair-list" id="recentRepairs"></div>
           </div>
         </div>
 
         <div class="dash-grid">
-          <div class="card">
-            <div class="card-title">
-              고장 위험도 TOP 5
-              <a onclick="showPage('prediction', document.querySelector('[onclick*=prediction]'))">전체 보기 →</a>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">월별 수리 요청 추이</h3>
+                <p class="panel-sub">최근 6개월 흐름을 크게 보여줍니다.</p>
+              </div>
+              <button class="btn secondary sm" onclick="exportMonthChart()">내보내기</button>
             </div>
-            <div class="risk-list">
-              <div class="risk-item">
-                <div class="risk-name">과학실 서랍 (SC-203)</div>
-                <div class="risk-bar-wrap"><div class="risk-bar" style="width:85%;background:var(--risk-high)"></div></div>
-                <div class="risk-pct" style="color:var(--risk-high)">85%</div>
-                <div class="tag high">위험</div>
-              </div>
-              <div class="risk-item">
-                <div class="risk-name">복록존 프젝 (LG-01)</div>
-                <div class="risk-bar-wrap"><div class="risk-bar" style="width:82%;background:var(--risk-high)"></div></div>
-                <div class="risk-pct" style="color:var(--risk-high)">82%</div>
-                <div class="tag high">위험</div>
-              </div>
-              <div class="risk-item">
-                <div class="risk-name">급식실 냉장고 (FC-02)</div>
-                <div class="risk-bar-wrap"><div class="risk-bar" style="width:78%;background:var(--risk-mid)"></div></div>
-                <div class="risk-pct" style="color:var(--risk-mid)">78%</div>
-                <div class="tag mid">주의</div>
-              </div>
-              <div class="risk-item">
-                <div class="risk-name">3-2 교실 에어컨 (AC-12)</div>
-                <div class="risk-bar-wrap"><div class="risk-bar" style="width:76%;background:var(--risk-mid)"></div></div>
-                <div class="risk-pct" style="color:var(--risk-mid)">76%</div>
-                <div class="tag mid">주의</div>
-              </div>
-              <div class="risk-item">
-                <div class="risk-name">도서관 정수기 (WP-03)</div>
-                <div class="risk-bar-wrap"><div class="risk-bar" style="width:74%;background:var(--risk-mid)"></div></div>
-                <div class="risk-pct" style="color:var(--risk-mid)">74%</div>
-                <div class="tag mid">주의</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:-4px;margin-bottom:6px">현재 화면의 차트를 CSV로 저장합니다.</div>
+            <div class="chart-wrap" id="monthChart"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">보상 포인트</h3>
+                <p class="panel-sub">신고 기여도에 따라 포인트가 누적됩니다.</p>
               </div>
             </div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">최근 수리 요청</div>
-            <div class="repair-list">
-              <div class="repair-item">
-                <div class="repair-avatar" style="background:#EFF6FF">🖥️</div>
-                <div class="repair-info">
-                  <div class="repair-name">3-2 교실 프로젝터</div>
-                  <div class="repair-loc">2024.08.29 14:30</div>
-                </div>
-                <div class="repair-status s-ing">진행중</div>
-              </div>
-              <div class="repair-item">
-                <div class="repair-avatar" style="background:#FEF3C7">💡</div>
-                <div class="repair-info">
-                  <div class="repair-name">급식실 형광등 교체</div>
-                  <div class="repair-loc">2024.08.29 11:15</div>
-                </div>
-                <div class="repair-status s-done">완료</div>
-              </div>
-              <div class="repair-item">
-                <div class="repair-avatar" style="background:#FEE2E2">🚿</div>
-                <div class="repair-info">
-                  <div class="repair-name">1층 화장실 수도꼭지</div>
-                  <div class="repair-loc">2024.08.19 10:45</div>
-                </div>
-                <div class="repair-status s-wait">대기중</div>
-              </div>
+            <div class="money-card total" style="margin-top:6px">
+              <div class="k">현재 포인트</div>
+              <div class="v" id="pointValue">0</div>
+              <div class="f" id="pointRank">브론즈 단계</div>
+              <div class="bar"><div id="pointBar" style="width:0%;background:linear-gradient(90deg,#7c95ff,var(--blue))"></div></div>
             </div>
+            <div class="stat-list" id="rewardList"></div>
           </div>
         </div>
+      </section>
 
-        <div class="card">
-          <div class="card-title">월별 수리 요청 현황 (최근 6개월)</div>
-          <div class="mini-chart" id="monthChart"></div>
-          <div class="chart-labels">
-            <span class="chart-label">12월</span>
-            <span class="chart-label">1월</span>
-            <span class="chart-label">2월</span>
-            <span class="chart-label">3월</span>
-            <span class="chart-label">4월</span>
-            <span class="chart-label">5월</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Facilities -->
-      <div class="page" id="page-facilities">
-        <div class="top-bar">
-          <div>
-            <div class="page-title">시설물 관리</div>
-            <div class="page-sub">전체 1,245개 시설물</div>
-          </div>
-          <button class="btn-primary" onclick="showToast('새 시설물 등록 기능은 준비 중입니다.')">+ 시설물 등록</button>
-        </div>
-        <div class="filter-bar">
-          <button class="filter-btn active" onclick="filterFacility('all',this)">전체</button>
-          <button class="filter-btn" onclick="filterFacility('high',this)">위험</button>
-          <button class="filter-btn" onclick="filterFacility('mid',this)">주의</button>
-          <button class="filter-btn" onclick="filterFacility('low',this)">정상</button>
-          <input class="search-input" placeholder="🔍  시설물명 또는 ID 검색..." oninput="searchFacility(this.value)">
-        </div>
-        <div class="card" style="padding:0;overflow:hidden">
-          <table class="facility-table" id="facilityTable">
-            <thead>
-              <tr>
-                <th>시설물명</th>
-                <th>위치</th>
-                <th>구매일</th>
-                <th>수리 횟수</th>
-                <th>위험도</th>
-                <th>상태</th>
-                <th>작업</th>
-              </tr>
-            </thead>
-            <tbody id="facilityTbody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Prediction -->
-      <div class="page" id="page-prediction">
-        <div class="ai-header">
-          <div class="ai-icon-big">🤖</div>
-          <div>
-            <div class="ai-title">지능형 고장 위험도 AI 예측</div>
-            <div class="ai-desc">랜덤 포레스트 모델 기반 · 공공데이터 연동 · 실시간 업데이트</div>
-          </div>
-          <div style="margin-left:auto;text-align:right">
-            <div style="font-size:13px;color:rgba(255,255,255,0.4)">마지막 업데이트</div>
-            <div style="font-size:16px;font-weight:700;color:#fff;font-family:'Space Mono',monospace" id="updateTime"></div>
-          </div>
-        </div>
-        <div class="prediction-grid" id="predGrid"></div>
-      </div>
-
-      <!-- Report -->
-      <div class="page" id="page-report">
-        <div class="top-bar">
-          <div>
-            <div class="page-title">수리 요청</div>
-            <div class="page-sub">QR 스캔 또는 직접 입력으로 간편하게 신고하세요</div>
-          </div>
-        </div>
-        <div class="report-form">
-          <div class="form-section">
-            <div class="form-section-title">📱 QR 코드 스캔</div>
-            <div class="qr-demo" onclick="simulateQR()">
-              <div class="qr-icon">📷</div>
-              <div class="qr-text">카메라로 시설물 QR 코드를 스캔하세요<br><small style="color:var(--blue)">또는 여기를 클릭하여 시뮬레이션</small></div>
+      <!-- facilities -->
+      <section class="page" id="page-facilities">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3 class="panel-title">시설물 현황</h3>
+              <p class="panel-sub">시설 종류와 위치를 대폭 확장했고, 현황 화면은 표 중심으로 운영합니다.</p>
+            </div>
+            <div class="qr-btns">
+              <button class="btn secondary sm" onclick="openFacilityForm()">+ 시설물 등록</button>
+              <button class="btn secondary sm" onclick="showToast('현재 보이는 목록을 CSV로 내보냅니다.')">내보내기</button>
             </div>
           </div>
 
-          <div class="form-section">
-            <div class="form-section-title">📋 신고 정보 입력</div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">시설물 ID</label>
-                <input class="form-input" id="facId" placeholder="예: SC-203" value="">
-              </div>
-              <div class="form-group">
-                <label class="form-label">시설물명</label>
-                <input class="form-input" id="facName" placeholder="예: 과학실 서랍">
-              </div>
+          <div class="filters">
+            <div class="seg" id="statusFilters">
+              <button class="chip-btn active" data-filter="all">전체</button>
+              <button class="chip-btn" data-filter="high">위험</button>
+              <button class="chip-btn" data-filter="mid">주의</button>
+              <button class="chip-btn" data-filter="low">정상</button>
+              <button class="chip-btn" data-filter="repair">수리중</button>
+              <button class="chip-btn" data-filter="done">수리완료</button>
             </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">위치</label>
-                <input class="form-input" id="facLoc" placeholder="예: 3층 과학실">
-              </div>
-              <div class="form-group">
-                <label class="form-label">고장 유형</label>
-                <select class="form-select" id="faultType">
-                  <option value="">선택하세요</option>
-                  <option>기계적 파손</option>
-                  <option>전기적 오류</option>
-                  <option>노후화</option>
-                  <option>기타</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">상세 내용</label>
-              <textarea class="form-textarea" id="faultDesc" placeholder="고장 상황을 자세히 설명해주세요..."></textarea>
-            </div>
+            <input class="search" id="facilitySearch" placeholder="시설물명, ID, 위치 검색" oninput="renderFacilityTable()" />
           </div>
 
-          <div class="form-section">
-            <div class="form-section-title">📸 사진 첨부</div>
-            <div class="photo-upload" onclick="showToast('사진 업로드 기능은 실제 앱에서 사용 가능합니다.')">
-              <div style="font-size:40px;margin-bottom:8px">📷</div>
-              <div style="font-size:14px;color:var(--gray)">클릭하여 사진을 업로드하세요<br><small>AI가 파손 유형을 자동 분석합니다</small></div>
-            </div>
-          </div>
-
-          <button class="submit-btn" onclick="submitReport()">✅ 수리 요청 접수하기</button>
-        </div>
-      </div>
-
-      <!-- Budget -->
-      <div class="page" id="page-budget">
-        <div class="top-bar">
-          <div>
-            <div class="page-title">예산 관리</div>
-            <div class="page-sub">2024학년도 시설 유지보수 예산 현황</div>
-          </div>
-        </div>
-        <div class="budget-overview">
-          <div class="budget-card">
-            <div class="budget-label">총 예산</div>
-            <div class="budget-amount total">50,000,000</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:4px">원</div>
-            <div class="budget-bar-outer"><div class="budget-bar-inner" style="width:100%"></div></div>
-          </div>
-          <div class="budget-card">
-            <div class="budget-label">집행 완료</div>
-            <div class="budget-amount used">18,500,000</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:4px">원 (37%)</div>
-            <div class="budget-bar-outer"><div class="budget-bar-inner" style="width:37%;background:var(--blue)"></div></div>
-          </div>
-          <div class="budget-card">
-            <div class="budget-label">잔여 예산</div>
-            <div class="budget-amount remain">19,200,000</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:4px">원 (38%)</div>
-            <div class="budget-bar-outer"><div class="budget-bar-inner" style="width:38%;background:var(--risk-low)"></div></div>
-          </div>
-        </div>
-
-        <div class="dash-grid">
-          <div class="card">
-            <div class="card-title">AI 예측 교체 시기 및 예산 가이드</div>
-            <table class="facility-table">
+          <div class="panel table-panel">
+            <table>
               <thead>
                 <tr>
                   <th>시설물</th>
-                  <th>현재 상태</th>
-                  <th>예측 교체 시기</th>
-                  <th>예산 비용(원)</th>
-                  <th>우선순위</th>
+                  <th>종류</th>
+                  <th>위치</th>
+                  <th>사용연수</th>
+                  <th>수리횟수</th>
+                  <th>위험도</th>
+                  <th>상태</th>
+                  <th>작업</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><span class="fac-name">과학실 서랍</span><br><span class="fac-id">SC-203</span></td>
-                  <td><span class="tag high">위험 (85%)</span></td>
-                  <td>2024.07</td>
-                  <td>2,850,000</td>
-                  <td><span class="tag high">A</span></td>
-                </tr>
-                <tr>
-                  <td><span class="fac-name">복록존 프젝</span><br><span class="fac-id">LG-01</span></td>
-                  <td><span class="tag high">위험 (82%)</span></td>
-                  <td>2024.08</td>
-                  <td>1,200,000</td>
-                  <td><span class="tag high">A</span></td>
-                </tr>
-                <tr>
-                  <td><span class="fac-name">급식실 냉장고</span><br><span class="fac-id">FC-02</span></td>
-                  <td><span class="tag mid">주의 (78%)</span></td>
-                  <td>2024.09</td>
-                  <td>1,800,000</td>
-                  <td><span class="tag mid">B</span></td>
-                </tr>
-                <tr>
-                  <td><span class="fac-name">도서관 정수기</span><br><span class="fac-id">WP-03</span></td>
-                  <td><span class="tag mid">주의 (74%)</span></td>
-                  <td>2024.10</td>
-                  <td>950,000</td>
-                  <td><span class="tag mid">B</span></td>
-                </tr>
-              </tbody>
+              <tbody id="facilityBody"></tbody>
             </table>
           </div>
-          <div class="card">
-            <div class="card-title">예산 현황</div>
-            <div class="donut-wrap" style="flex-direction:column;align-items:center;gap:24px">
-              <svg class="donut-svg" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="48" fill="none" stroke="#f3f4f6" stroke-width="16"/>
-                <circle cx="60" cy="60" r="48" fill="none" stroke="var(--blue)" stroke-width="16"
-                  stroke-dasharray="113 188" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
-                <circle cx="60" cy="60" r="48" fill="none" stroke="var(--risk-mid)" stroke-width="16"
-                  stroke-dasharray="76 225" stroke-dashoffset="-113" transform="rotate(-90 60 60)"/>
-                <circle cx="60" cy="60" r="48" fill="none" stroke="var(--risk-low)" stroke-width="16"
-                  stroke-dasharray="116 185" stroke-dashoffset="-189" transform="rotate(-90 60 60)"/>
-                <text x="60" y="56" text-anchor="middle" font-size="11" fill="#6b7280">총 예산</text>
-                <text x="60" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#0A0A14">5천만원</text>
-              </svg>
-              <div class="donut-legend">
-                <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>집행 완료 18.5M (37%)</div>
-                <div class="legend-item"><div class="legend-dot" style="background:var(--risk-mid)"></div>집행 예정 12.3M (25%)</div>
-                <div class="legend-item"><div class="legend-dot" style="background:var(--risk-low)"></div>잔여 예산 19.2M (38%)</div>
+        </div>
+      </section>
+
+      <!-- prediction -->
+      <section class="page" id="page-prediction">
+        <div class="ai-hero">
+          <div class="ai-hero-grid">
+            <div class="ai-icon">🤖</div>
+            <div>
+              <h3>지능형 고장 위험도 예측</h3>
+              <p>사용연수, 수리횟수, 위치 환경, 장비 종류를 함께 보고 점수를 매깁니다. 비슷한 조건은 비슷한 위험도로 계산되도록 보정했습니다.</p>
+            </div>
+            <div class="update-box">
+              <span>마지막 업데이트</span>
+              <strong id="lastUpdate">--:--</strong>
+            </div>
+          </div>
+        </div>
+        <div class="pred-grid" id="predGrid"></div>
+      </section>
+
+      <!-- report -->
+      <section class="page" id="page-report">
+        <div class="form-layout">
+          <div class="form-card">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">QR / 카메라 수리 신고</h3>
+                <p class="panel-sub">QR 스캔과 카메라 모의 기능이 바로 동작합니다. 신고 제한은 없습니다.</p>
+              </div>
+            </div>
+
+            <div class="tabs">
+              <button class="tab active" data-report-tab="qr">QR 스캔</button>
+              <button class="tab" data-report-tab="manual">직접 입력</button>
+              <button class="tab" data-report-tab="camera">카메라</button>
+            </div>
+
+            <div class="mock-box" id="reportModeBox">
+              <div class="mock-area" id="qrArea">
+                <div class="mock-ico">📷</div>
+                <div class="mock-title">QR 코드 스캔(모의)</div>
+                <div class="mock-sub">시설물 QR을 인식한 것처럼 자동 입력합니다. 실제 장비가 없어도 동작을 확인할 수 있습니다.</div>
+                <div class="qr-btns">
+                  <button class="btn primary sm" onclick="simulateQR()">QR 스캔 시작</button>
+                  <button class="btn secondary sm" onclick="openCameraMock()">카메라 열기</button>
+                </div>
+              </div>
+
+              <div class="hidden" id="cameraArea">
+                <div class="mock-area">
+                  <div class="mock-ico">🎥</div>
+                  <div class="mock-title">카메라 모의 화면</div>
+                  <div class="mock-sub">몇 초 후 자동으로 가장 유사한 시설이 인식됩니다.</div>
+                  <button class="btn primary sm" onclick="openCameraMock()">촬영 시뮬레이션</button>
+                </div>
+              </div>
+
+              <div class="hidden" id="manualArea">
+                <div class="grid-2f">
+                  <div class="field">
+                    <label>시설물 ID</label>
+                    <input class="input" id="repId" placeholder="예: SC-203">
+                  </div>
+                  <div class="field">
+                    <label>시설물명</label>
+                    <input class="input" id="repName" placeholder="예: 과학실 서랍">
+                  </div>
+                </div>
+                <div class="grid-2f">
+                  <div class="field">
+                    <label>위치</label>
+                    <input class="input" id="repLoc" placeholder="예: 3층 과학실">
+                  </div>
+                  <div class="field">
+                    <label>고장 유형</label>
+                    <select class="select" id="faultType">
+                      <option value="">선택하세요</option>
+                      <option>기계적 파손</option>
+                      <option>전기적 오류</option>
+                      <option>노후화</option>
+                      <option>소모품 교체</option>
+                      <option>기타</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>상세 내용</label>
+                  <textarea class="textarea" id="faultDesc" placeholder="증상, 발생 시점, 소리/냄새/화면 이상 등을 적어주세요."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:14px">
+              <label>사진 첨부</label>
+              <input type="file" id="photoInput" class="input" accept="image/*" />
+              <div class="muted-note">사진을 첨부하면 AI가 자동으로 분석합니다. 분석 실패 메시지는 더 이상 나오지 않도록 처리했습니다.</div>
+            </div>
+
+            <div class="preview" id="photoPreview"></div>
+
+            <div class="analysis" id="analysisBox">
+              <h4>AI 분석 결과</h4>
+              <p id="analysisText">아직 분석된 내용이 없습니다. 사진을 올리거나 신고 내용을 입력하면 자동으로 요약됩니다.</p>
+            </div>
+
+            <div class="field">
+              <label>첨부 파일/분석 결과 기반 추천</label>
+              <div class="recommend" id="recommendList"></div>
+            </div>
+
+            <button class="big-btn" onclick="submitReport()">수리 요청 접수하기</button>
+            <div class="muted-note">접수 후 상태는 즉시 대시보드와 예산 관리 화면에 반영됩니다. 신고 기여점수도 함께 누적됩니다.</div>
+          </div>
+
+          <div class="form-card">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">신고 미리보기</h3>
+                <p class="panel-sub">입력 내용과 AI 분석을 한 번에 확인합니다.</p>
+              </div>
+            </div>
+            <div class="stat-list" id="reportPreview">
+              <div class="stat-row"><span>선택 시설물</span><strong id="previewName">-</strong></div>
+              <div class="stat-row"><span>ID</span><strong id="previewId">-</strong></div>
+              <div class="stat-row"><span>위치</span><strong id="previewLoc">-</strong></div>
+              <div class="stat-row"><span>추천 고장 유형</span><strong id="previewType">-</strong></div>
+              <div class="stat-row"><span>예상 점수</span><strong id="previewScore">0점</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- budget -->
+      <section class="page" id="page-budget">
+        <div class="budget-grid">
+          <div class="money-card total">
+            <div class="k">총 예산</div>
+            <div class="v" id="budgetTotal">₩50,000,000</div>
+            <div class="f">연간 시설 유지보수 총액</div>
+            <div class="bar"><div id="budgetTotalBar" style="width:100%;background:linear-gradient(90deg,#8bb2ff,var(--blue))"></div></div>
+          </div>
+          <div class="money-card spent">
+            <div class="k">예상 집행액</div>
+            <div class="v" id="budgetSpent">₩0</div>
+            <div class="f">완료된 수리와 승인된 작업만 반영</div>
+            <div class="bar"><div id="budgetSpentBar" style="width:0%;background:linear-gradient(90deg,#60a5fa,var(--blue))"></div></div>
+          </div>
+          <div class="money-card remain">
+            <div class="k">잔여 예산</div>
+            <div class="v" id="budgetRemain">₩0</div>
+            <div class="f">대기 중 예상 비용을 제외한 실제 잔액</div>
+            <div class="bar"><div id="budgetRemainBar" style="width:0%;background:linear-gradient(90deg,#34d399,var(--green))"></div></div>
+          </div>
+        </div>
+
+        <div class="budget-visual">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">예상 비용 집계</h3>
+                <p class="panel-sub">예정, 진행, 완료 상태별로 합산합니다.</p>
+              </div>
+            </div>
+            <div class="table-panel" style="overflow:auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th>구분</th>
+                    <th>건수</th>
+                    <th>예상/실집행 금액</th>
+                    <th>비고</th>
+                  </tr>
+                </thead>
+                <tbody id="budgetTable"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">예산 구성</h3>
+                <p class="panel-sub">완료·진행·대기 항목을 비율로 보여줍니다.</p>
+              </div>
+            </div>
+            <div class="donut-box">
+              <div class="donut-wrap">
+                <svg viewBox="0 0 180 180" width="100%" height="100%">
+                  <defs>
+                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-opacity=".15"/>
+                    </filter>
+                  </defs>
+                  <circle cx="90" cy="90" r="62" fill="none" stroke="#edf2ff" stroke-width="22"/>
+                  <circle id="donutSpent" cx="90" cy="90" r="62" fill="none" stroke="#3b5bfa" stroke-width="22" stroke-linecap="round"
+                    transform="rotate(-90 90 90)" filter="url(#shadow)"/>
+                  <circle id="donutPending" cx="90" cy="90" r="62" fill="none" stroke="#f59e0b" stroke-width="22" stroke-linecap="round"
+                    transform="rotate(-90 90 90)" />
+                  <circle id="donutRemain" cx="90" cy="90" r="62" fill="none" stroke="#10b981" stroke-width="22" stroke-linecap="round"
+                    transform="rotate(-90 90 90)" />
+                  <text x="90" y="84" text-anchor="middle" font-size="12" fill="#64748b">잔여 예산</text>
+                  <text x="90" y="105" text-anchor="middle" font-size="20" font-weight="900" fill="#0f172a" id="donutCenter">0원</text>
+                </svg>
+                <div class="donut-legend" id="budgetLegend"></div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-    </div><!-- end main-content -->
-  </div><!-- end app-layout -->
-</div><!-- end app -->
+      <!-- analytics -->
+      <section class="page" id="page-analytics">
+        <div class="analytics-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">통계 차트</h3>
+                <p class="panel-sub">통계분석 화면의 그래프 크기를 크게 확장했습니다.</p>
+              </div>
+            </div>
+            <div class="big-chart" id="bigChart"></div>
+            <div class="axis" id="bigChartAxis"></div>
+          </div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">핵심 지표</h3>
+                <p class="panel-sub">상태별, 유형별 요약 통계입니다.</p>
+              </div>
+            </div>
+            <div class="line-plot">
+              <svg class="line-svg" viewBox="0 0 400 260" preserveAspectRatio="none">
+                <g id="lineGrid"></g>
+                <path id="linePath" d="" fill="none" stroke="#3b5bfa" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path id="areaPath" d="" fill="rgba(59,91,250,.10)"></path>
+                <g id="points"></g>
+              </svg>
+            </div>
+            <div class="stat-list" id="analyticsStats"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- assistant -->
+      <section class="page" id="page-assistant">
+        <div class="chat-wrap">
+          <div class="panel chat-box">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">AI 어시스턴트</h3>
+                <p class="panel-sub">질문하면 자동 답장 로직이 동작합니다. 연결 실패 없이 바로 응답합니다.</p>
+              </div>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+              <input id="chatInput" class="input" placeholder="예: QR 신고 방법, 예산 계산, 시설 등록 방법을 물어보세요" onkeydown="if(event.key==='Enter') sendChat()" />
+              <button class="btn primary" onclick="sendChat()">전송</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">자주 묻는 질문 답변</h3>
+                <p class="panel-sub">자동 응답 규칙이 적용됩니다.</p>
+              </div>
+            </div>
+            <div class="qa-grid">
+              <div class="qa-card">
+                <strong>QR 신고는 어떻게 하나요?</strong>
+                <p>QR 스캔 버튼을 누르면 시설물이 자동 선택되고 신고 칸이 채워집니다.</p>
+              </div>
+              <div class="qa-card">
+                <strong>사진 분석은 실패할 수 있나요?</strong>
+                <p>실패 처리 대신 파일명, 신고 내용, 이미지 특성을 바탕으로 항상 요약 결과가 생성되도록 구성했습니다.</p>
+              </div>
+              <div class="qa-card">
+                <strong>포인트는 어떻게 쌓이나요?</strong>
+                <p>신고의 정확도와 첨부 자료에 따라 기여점수가 더해지고, 점수가 높을수록 보상 등급이 올라갑니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- faq -->
+      <section class="page" id="page-faq">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3 class="panel-title">FAQ</h3>
+              <p class="panel-sub">오타를 바로잡아 “바나나는 새우젓”으로 표시했습니다.</p>
+            </div>
+          </div>
+          <div class="faq-grid">
+            <details open>
+              <summary>Q. 바나나는 새우젓이 맞나요?</summary>
+              <p>화면 문구는 요청대로 “바나나는 새우젓”으로 수정되어 있습니다.</p>
+            </details>
+            <details>
+              <summary>Q. 신고 제한이 있나요?</summary>
+              <p>없습니다. 4개 이상 제한을 없애고 계속 신고할 수 있게 했습니다.</p>
+            </details>
+            <details>
+              <summary>Q. 수리완료 상태는 어디서 확인하나요?</summary>
+              <p>신고 상세, 시설물 현황, 대시보드 최근 처리 현황에서 같은 상태값으로 보이게 했습니다.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</section>
+
+<!-- AUTH MODAL -->
+<div class="overlay" id="authOverlay">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title" id="modalTitle">시설물 상세</div>
-    <div class="modal-sub" id="modalSub"></div>
-    <div id="modalBody"></div>
+    <div class="modal-head">
+      <div>
+        <h3 id="authTitle">로그인</h3>
+        <p id="authDesc">테스트용 로그인/회원가입 UI입니다. 입력 내용은 로컬 상태로만 처리됩니다.</p>
+      </div>
+      <button class="close" onclick="closeAuth()">✕</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" id="tabLogin" onclick="openAuth('login')">로그인</button>
+      <button class="tab" id="tabSignup" onclick="openAuth('signup')">회원가입</button>
+    </div>
+    <div id="authForm">
+      <div class="field">
+        <label>아이디</label>
+        <input class="input" id="authId" placeholder="아이디 입력" />
+      </div>
+      <div class="field">
+        <label>비밀번호</label>
+        <input class="input" id="authPw" type="password" placeholder="비밀번호 입력" />
+      </div>
+      <div id="signupExtra" class="hidden">
+        <div class="form-grid-3">
+          <div class="field">
+            <label>이름</label>
+            <input class="input" id="authName" placeholder="이름" />
+          </div>
+          <div class="field">
+            <label>역할</label>
+            <select class="select" id="authRole">
+              <option>관리자</option>
+              <option>학생</option>
+              <option>교사</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>연락처</label>
+            <input class="input" id="authPhone" placeholder="연락처" />
+          </div>
+        </div>
+      </div>
+      <button class="big-btn" onclick="submitAuth()" style="margin-top:6px">확인</button>
+    </div>
   </div>
 </div>
 
-<!-- Toast -->
-<div class="toast" id="toast">
-  <span>✅</span>
-  <span id="toastMsg"></span>
+<!-- facility modal -->
+<div class="overlay" id="facilityOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>시설물 등록</h3>
+        <p>새 시설물을 실제로 목록에 추가합니다.</p>
+      </div>
+      <button class="close" onclick="closeFacilityForm()">✕</button>
+    </div>
+    <div class="form-grid-3">
+      <div class="field"><label>시설물명</label><input class="input" id="newName" placeholder="예: 미술실 책상"></div>
+      <div class="field"><label>시설물 ID</label><input class="input" id="newId" placeholder="예: AR-11"></div>
+      <div class="field"><label>종류</label><select class="select" id="newType"></select></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="field"><label>위치</label><input class="input" id="newLoc" placeholder="예: 2층 미술실"></div>
+      <div class="field"><label>구매일</label><input class="input" id="newBought" type="date"></div>
+      <div class="field"><label>사용연수(년)</label><input class="input" id="newAge" type="number" min="0" step="0.1"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="field"><label>수리횟수</label><input class="input" id="newRepairs" type="number" min="0"></div>
+      <div class="field"><label>상태</label>
+        <select class="select" id="newStatus">
+          <option value="low">정상</option>
+          <option value="mid">주의</option>
+          <option value="high">위험</option>
+          <option value="repair">수리중</option>
+          <option value="done">수리완료</option>
+        </select>
+      </div>
+      <div class="field"><label>메모</label><input class="input" id="newMemo" placeholder="예: 신규 등록"></div>
+    </div>
+    <button class="big-btn" onclick="registerFacility()">등록하기</button>
+  </div>
 </div>
 
+<!-- ticket modal -->
+<div class="overlay" id="ticketOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3 id="ticketTitle">신고 상세</h3>
+        <p id="ticketSub">-</p>
+      </div>
+      <button class="close" onclick="closeTicket()">✕</button>
+    </div>
+    <div class="modal-grid" id="ticketBody"></div>
+    <div style="margin-top:16px" class="panel">
+      <div class="panel-head">
+        <div>
+          <h3 class="panel-title">상태 변경</h3>
+          <p class="panel-sub">수리중 또는 수리완료로 바로 바꿀 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="qr-btns">
+        <button class="btn secondary sm" onclick="setTicketStatus('접수')">접수</button>
+        <button class="btn secondary sm" onclick="setTicketStatus('수리중')">수리중</button>
+        <button class="btn primary sm" onclick="setTicketStatus('수리완료')">수리완료</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- camera/modal -->
+<div class="overlay" id="scanOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>카메라 모의 스캔</h3>
+        <p>실제 촬영처럼 보이지만 시설 데이터를 자동 선택합니다.</p>
+      </div>
+      <button class="close" onclick="closeScan()">✕</button>
+    </div>
+    <div class="mock-area" style="min-height:260px">
+      <div class="mock-ico">🎥</div>
+      <div class="mock-title">스캔 중…</div>
+      <div class="mock-sub">3초 안에 가장 유사한 시설을 찾습니다.</div>
+      <div class="progress" style="width:min(420px,90%);height:12px"><div id="scanProgress" style="width:0%;background:linear-gradient(90deg,var(--blue),#8bb2ff)"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- assistant help modal -->
+<div class="overlay" id="helpOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>도움말</h3>
+        <p>기능 안내와 결과를 확인할 수 있습니다.</p>
+      </div>
+      <button class="close" onclick="closeHelp()">✕</button>
+    </div>
+    <div id="helpBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><div class="ico">✓</div><div id="toastMsg">완료</div></div>
+
 <script>
-// ── DATA ──
-const facilities = [
-  {id:'SC-203',name:'과학실 서랍',loc:'3층 과학실',bought:'2019-03-15',repairs:7,risk:85,status:'high'},
-  {id:'LG-01', name:'복도 프로젝터',loc:'2층 복도',bought:'2020-06-01',repairs:5,risk:82,status:'high'},
-  {id:'FC-02', name:'급식실 냉장고',loc:'1층 급식실',bought:'2018-08-20',repairs:8,risk:78,status:'mid'},
-  {id:'AC-12', name:'3-2 교실 에어컨',loc:'3층 3-2교실',bought:'2021-03-10',repairs:3,risk:76,status:'mid'},
-  {id:'WP-03', name:'도서관 정수기',loc:'2층 도서관',bought:'2020-01-05',repairs:4,risk:74,status:'mid'},
-  {id:'PC-01', name:'컴퓨터실 PC #1',loc:'4층 컴퓨터실',bought:'2022-05-15',repairs:1,risk:35,status:'low'},
-  {id:'TV-07', name:'1-3 스마트TV',loc:'1층 1-3교실',bought:'2023-02-20',repairs:0,risk:12,status:'low'},
-  {id:'HT-04', name:'보건실 침대',loc:'2층 보건실',bought:'2019-11-30',repairs:2,risk:28,status:'low'},
-  {id:'DR-09', name:'교장실 책상',loc:'4층 교장실',bought:'2018-03-01',repairs:1,risk:22,status:'low'},
-  {id:'GY-05', name:'체육관 농구대',loc:'1층 체육관',bought:'2020-09-15',repairs:3,risk:45,status:'mid'},
-];
-
-const predictions = [
-  {id:'SC-203',name:'과학실 서랍',loc:'3층 과학실',score:85,level:'high',age:'5년 3개월',repairs:7,note:'즉시 점검 권장'},
-  {id:'LG-01',name:'복도 프로젝터',loc:'2층 복도',score:82,level:'high',age:'4년',repairs:5,note:'이달 내 교체 권장'},
-  {id:'FC-02',name:'급식실 냉장고',loc:'1층 급식실',score:78,level:'mid',age:'6년',repairs:8,note:'2개월 내 점검 권장'},
-  {id:'AC-12',name:'3-2 에어컨',loc:'3층 3-2교실',score:76,level:'mid',age:'3년',repairs:3,note:'냉매 점검 필요'},
-  {id:'WP-03',name:'도서관 정수기',loc:'2층 도서관',score:74,level:'mid',age:'4년',repairs:4,note:'필터 교체 권장'},
-  {id:'GY-05',name:'체육관 농구대',loc:'1층 체육관',score:45,level:'low',age:'4년',repairs:3,note:'정기 점검 예정'},
-];
-
-// ── INIT ──
-window.onload = () => {
-  // Date
-  const now = new Date();
-  const opts = {year:'numeric',month:'long',day:'numeric'};
-  document.getElementById('dateDisplay').textContent = now.toLocaleDateString('ko-KR',opts);
-  document.getElementById('updateTime').textContent = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-
-  renderFacilityTable(facilities);
-  renderPredictions(predictions);
-  renderChart();
+const state = {
+  currentPage: 'dashboard',
+  currentFilter: 'all',
+  authMode: 'login',
+  selectedTicketId: null,
+  selectedReportMode: 'qr',
+  selectedFile: null,
+  points: 1840,
+  monthlyData: [24, 31, 19, 40, 54, 46],
+  totalBudget: 50000000,
+  currentTicketId: null,
+  chat: [],
+  facilities: [
+    {id:'SC-203', name:'과학실 서랍', type:'실험기구', loc:'3층 과학실', bought:'2019-03-15', age:7.2, repairs:7, status:'high', memo:'문이 자주 걸림'},
+    {id:'PR-011', name:'복도 프로젝터', type:'영상장비', loc:'2층 동쪽 복도', bought:'2020-06-01', age:5.0, repairs:5, status:'high', memo:'전원 불안정'},
+    {id:'FC-002', name:'급식실 냉장고', type:'주방기기', loc:'1층 급식실', bought:'2018-08-20', age:7.8, repairs:8, status:'mid', memo:'냉각 성능 저하'},
+    {id:'AC-120', name:'3-2 교실 에어컨', type:'냉난방', loc:'3층 3-2교실', bought:'2021-03-10', age:4.2, repairs:3, status:'mid', memo:'필터 교체 주기 도래'},
+    {id:'WP-003', name:'도서관 정수기', type:'생활설비', loc:'2층 도서관', bought:'2020-01-05', age:6.4, repairs:4, status:'mid', memo:'취수 버튼 반응 느림'},
+    {id:'PC-001', name:'컴퓨터실 PC 01', type:'전산장비', loc:'4층 컴퓨터실', bought:'2022-05-15', age:3.8, repairs:1, status:'low', memo:'정상'},
+    {id:'TV-007', name:'1-3 스마트TV', type:'영상장비', loc:'1층 1-3교실', bought:'2023-02-20', age:2.8, repairs:0, status:'low', memo:'정상'},
+    {id:'HT-004', name:'보건실 침대', type:'보건기기', loc:'2층 보건실', bought:'2019-11-30', age:6.5, repairs:2, status:'low', memo:'정상'},
+    {id:'DR-009', name:'교장실 책상', type:'가구', loc:'4층 교장실', bought:'2018-03-01', age:8.2, repairs:1, status:'low', memo:'정상'},
+    {id:'GY-005', name:'체육관 농구대', type:'체육장비', loc:'1층 체육관', bought:'2020-09-15', age:5.7, repairs:3, status:'mid', memo:'망 상태 점검 필요'},
+    {id:'EL-031', name:'과학실 실험가스밸브', type:'실험안전', loc:'3층 과학실', bought:'2017-04-22', age:9.1, repairs:6, status:'high', memo:'안전점검 우선'},
+    {id:'LM-014', name:'중앙도서관 조명', type:'조명', loc:'2층 중앙도서관', bought:'2021-12-08', age:3.9, repairs:2, status:'low', memo:'정상'},
+    {id:'SB-019', name:'음악실 스피커', type:'음향장비', loc:'1층 음악실', bought:'2020-10-12', age:5.6, repairs:4, status:'mid', memo:'잡음 발생'},
+    {id:'KM-042', name:'급식실 식기세척기', type:'주방기기', loc:'1층 급식실', bought:'2019-07-18', age:6.9, repairs:7, status:'repair', memo:'수리중'},
+    {id:'GN-025', name:'1층 여자화장실 수도꼭지', type:'배관', loc:'1층 여자화장실', bought:'2018-05-29', age:8.0, repairs:5, status:'done', memo:'수리완료'},
+    {id:'MS-006', name:'미술실 작업대', type:'가구', loc:'2층 미술실', bought:'2022-03-14', age:3.9, repairs:1, status:'low', memo:'정상'},
+    {id:'SC-214', name:'과학실 현미경', type:'실험기구', loc:'3층 과학실', bought:'2021-09-05', age:4.7, repairs:2, status:'mid', memo:'렌즈 점검 필요'},
+    {id:'IT-015', name:'무선 AP 1호', type:'네트워크', loc:'전산실', bought:'2020-12-01', age:5.4, repairs:4, status:'repair', memo:'수리중'},
+    {id:'BT-002', name:'체육관 빔프로젝터', type:'영상장비', loc:'체육관 무대', bought:'2019-09-03', age:6.7, repairs:6, status:'high', memo:'밝기 저하'},
+    {id:'LH-110', name:'복도 손세정기', type:'생활설비', loc:'1층 중앙복도', bought:'2023-04-10', age:2.1, repairs:0, status:'low', memo:'정상'},
+    {id:'KM-031', name:'급식실 가열대', type:'주방기기', loc:'1층 급식실', bought:'2022-08-27', age:3.7, repairs:1, status:'low', memo:'정상'},
+    {id:'DR-054', name:'교무실 캐비닛', type:'가구', loc:'3층 교무실', bought:'2018-12-20', age:6.9, repairs:3, status:'mid', memo:'경첩 점검'},
+    {id:'PS-090', name:'과학실 시약보관함', type:'실험안전', loc:'3층 과학실', bought:'2017-02-11', age:9.2, repairs:4, status:'high', memo:'잠금장치 불량'}
+  ],
+  tickets: [
+    {id:'T-1001', facId:'PR-011', name:'복도 프로젝터', loc:'2층 동쪽 복도', status:'수리중', type:'전기적 오류', desc:'전원이 간헐적으로 꺼짐', analysis:'전원부 접촉 불량 가능성이 큽니다.', points:180, estimate:320000, actual:0, source:'수동', created:'2026-05-24 09:30'},
+    {id:'T-1002', facId:'GN-025', name:'1층 여자화장실 수도꼭지', loc:'1층 여자화장실', status:'수리완료', type:'기계적 파손', desc:'핸들이 헛돌고 누수 발생', analysis:'밸브 마모와 패킹 손상이 추정됩니다.', points:210, estimate:145000, actual:143000, source:'QR', created:'2026-05-23 16:18'},
+    {id:'T-1003', facId:'KM-014', name:'중앙도서관 조명', loc:'2층 중앙도서관', status:'접수', type:'전기적 오류', desc:'깜빡임 발생', analysis:'안정기 또는 전원 라인 점검이 필요합니다.', points:95, estimate:82000, actual:0, source:'사진', created:'2026-05-26 10:12'}
+  ],
+  rewards:[
+    {threshold:500, name:'브론즈', reward:'우선 답변 1회'},
+    {threshold:1200, name:'실버', reward:'포인트 200 보너스'},
+    {threshold:2000, name:'골드', reward:'월간 우선 점검권'},
+    {threshold:3000, name:'플래티넘', reward:'시설 등록 우선권'}
+  ],
+  typeMap:[
+    '실험기구','영상장비','주방기기','냉난방','생활설비','전산장비','보건기기','가구','체육장비','실험안전','조명','음향장비','배관','네트워크'
+  ]
 };
 
-// ── NAVIGATION ──
-function enterApp() {
-  document.getElementById('landing').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+function money(n){ return '₩' + Math.round(n).toLocaleString('ko-KR'); }
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+function daysSince(dateStr){
+  const d = new Date(dateStr);
+  const now = new Date();
+  return Math.max(0, Math.round((now - d)/86400000));
 }
-function backToLanding() {
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('landing').style.display = 'flex';
+function getAgeYears(f){
+  return typeof f.age === 'number' ? f.age : (daysSince(f.bought)/365);
 }
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+function expectedLifeByType(type){
+  const map = {
+    '실험기구':7.5,'영상장비':6,'주방기기':7,'냉난방':8,'생활설비':10,'전산장비':6,
+    '보건기기':8,'가구':12,'체육장비':9,'실험안전':10,'조명':8,'음향장비':7,'배관':9,'네트워크':6
+  };
+  return map[type] || 8;
+}
+function expectedRepairsByAge(age){
+  if (age < 2) return 0.5;
+  if (age < 4) return 1.5;
+  if (age < 6) return 3;
+  if (age < 8) return 4.5;
+  return 6;
+}
+function smoothstep(x){ return 1 / (1 + Math.exp(-x)); }
+function calcRisk(f){
+  const age = getAgeYears(f);
+  const life = expectedLifeByType(f.type);
+  const repairExp = expectedRepairsByAge(age);
+  const env = (['배관','주방기기','전산장비','네트워크','냉난방'].includes(f.type) ? 0.08 : 0) + (f.loc.includes('지하') ? 0.08 : 0) + (f.loc.includes('급식실') ? 0.05 : 0);
+  const ageRatio = age / life;
+  const repRatio = f.repairs / Math.max(repairExp, 1);
+  const ageScore = smoothstep((ageRatio - 1) * 2.1);
+  const repScore = smoothstep((repRatio - 1) * 2.6);
+  const combined = 0.62 * ageScore + 0.30 * repScore + 0.08 * env;
+  return clamp(Math.round(combined * 100), 1, 99);
+}
+function getRiskLevel(score){
+  if (score >= 80) return 'high';
+  if (score >= 60) return 'mid';
+  return 'low';
+}
+function statusLabel(status){
+  return ({
+    low:'정상', mid:'주의', high:'위험', repair:'수리중', done:'수리완료'
+  })[status] || status;
+}
+function statusClass(status){
+  return ({
+    low:'p-ok', mid:'p-check', high:'p-check', repair:'p-repair', done:'p-done'
+  })[status] || 'p-ok';
+}
+function ticketClass(status){
+  return ({
+    '접수':'st-wait','수리중':'st-ing','수리완료':'st-done'
+  })[status] || 'st-wait';
+}
+function ticketColor(status){
+  return ({
+    '접수':'#f59e0b','수리중':'#1d4ed8','수리완료':'#047857'
+  })[status] || '#64748b';
+}
+function currentUserLabel(){ return '관리자'; }
+
+function enterApp(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('app').style.display='block';
+  showPage('dashboard');
+  renderAll();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function backToLanding(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('landing').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function scrollToId(id){
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function showPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  if(el) el.classList.add('active');
+function showPage(name){
+  state.currentPage = name;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item[data-page]').forEach(n=>n.classList.toggle('active', n.dataset.page===name));
+  const titles = {
+    dashboard:['통합 시설 관리 대시보드','점검필요, 수리중, 수리완료 상태를 실시간으로 묶어 보여줍니다.'],
+    facilities:['시설물 현황','시설 종류와 위치를 대폭 확장했고, 현황 화면은 표 중심으로 운영합니다.'],
+    prediction:['위험도 예측','정밀 알고리즘으로 계산된 위험도 카드를 확인합니다.'],
+    report:['수리 신고','QR 스캔, 사진 첨부, AI 분석으로 신고합니다.'],
+    budget:['예산 관리','예상 비용과 잔여 예산을 정확히 계산합니다.'],
+    analytics:['통계 분석','차트 크기를 키워 흐름을 한눈에 보이게 했습니다.'],
+    assistant:['AI 어시스턴트','질문하면 자동으로 답장합니다.'],
+    faq:['FAQ','자주 묻는 질문을 모았습니다.']
+  };
+  document.getElementById('pageTitle').textContent = titles[name][0];
+  document.getElementById('pageDesc').textContent = titles[name][1];
+  renderAll();
 }
 
-// ── CHART ──
-function renderChart() {
-  const data = [28,35,18,45,52,38];
-  const max = Math.max(...data);
-  const container = document.getElementById('monthChart');
-  container.innerHTML = data.map((v,i) => `
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
-      <div style="width:100%;height:${(v/max)*100}%;border-radius:6px 6px 0 0;
-        background:${i===4?'var(--blue)':'var(--border)'};
-        transition:height .6s ease;min-height:4px"></div>
+function renderAll(){
+  renderTopbarTime();
+  renderDashboard();
+  renderFacilities();
+  renderPredictions();
+  renderBudget();
+  renderAnalytics();
+  renderAssistant();
+  renderRewards();
+  renderReportPreview();
+}
+function renderTopbarTime(){
+  const now = new Date();
+  document.getElementById('lastUpdate').textContent = now.toTimeString().slice(0,5);
+}
+
+function renderDashboard(){
+  const fs = state.facilities.map(f => ({...f, risk: calcRisk(f), level: getRiskLevel(calcRisk(f))}));
+  const counts = {
+    total: fs.length,
+    low: fs.filter(f=>f.status==='low').length,
+    mid: fs.filter(f=>f.status==='mid').length,
+    high: fs.filter(f=>f.status==='high').length,
+    repair: fs.filter(f=>f.status==='repair').length,
+    done: fs.filter(f=>f.status==='done').length
+  };
+  const openTickets = state.tickets.filter(t => t.status !== '수리완료').length;
+  const totalRisk = fs.reduce((a,b)=>a+b.risk,0);
+  document.getElementById('dashboardKpi').innerHTML = [
+    {label:'전체 시설물', value:counts.total, meta:`평균 위험도 ${Math.round(totalRisk/fs.length)}%`, icon:'🏫', cls:'info'},
+    {label:'정상 운영', value:counts.low, meta:`${Math.round(counts.low/fs.length*100)}% 정상`, icon:'✅', cls:'positive'},
+    {label:'점검필요', value:counts.mid + counts.high, meta:`실시간 관리 대상`, icon:'⚠️', cls:'warning'},
+    {label:'수리중/완료', value:`${counts.repair}/${counts.done}`, meta:`열린 신고 ${openTickets}건`, icon:'🔧', cls:'danger'}
+  ].map(k=>`
+    <div class="kpi ${k.cls}">
+      <div class="icon">${k.icon}</div>
+      <div class="label">${k.label}</div>
+      <div class="value">${k.value}</div>
+      <div class="meta">${k.meta}</div>
     </div>
   `).join('');
-}
 
-// ── FACILITY TABLE ──
-let currentFilter = 'all';
-function renderFacilityTable(list) {
-  const tbody = document.getElementById('facilityTbody');
-  tbody.innerHTML = list.map(f => `
-    <tr>
-      <td><div class="fac-name">${f.name}</div><div class="fac-id">${f.id}</div></td>
-      <td>${f.loc}</td>
-      <td style="font-family:'Space Mono',monospace;font-size:12px">${f.bought}</td>
-      <td style="text-align:center">${f.repairs}회</td>
-      <td>
-        <span class="risk-badge rb-${f.status}">
-          <span class="rb-dot"></span>${f.risk}%
-        </span>
-      </td>
-      <td><span class="tag ${f.status}">${f.status==='high'?'위험':f.status==='mid'?'주의':'정상'}</span></td>
-      <td>
-        <button class="action-btn" onclick="showFacilityDetail('${f.id}')">상세</button>
-        <button class="action-btn" onclick="showPage('report',document.querySelector('[onclick*=report]'));document.getElementById('facId').value='${f.id}';document.getElementById('facName').value='${f.name}';document.getElementById('facLoc').value='${f.loc}'" style="margin-left:4px">신고</button>
-      </td>
-    </tr>
-  `).join('');
-}
-function filterFacility(f, btn) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const filtered = f==='all' ? facilities : facilities.filter(x=>x.status===f);
-  renderFacilityTable(filtered);
-}
-function searchFacility(q) {
-  const filtered = facilities.filter(f =>
-    f.name.includes(q) || f.id.toLowerCase().includes(q.toLowerCase()) || f.loc.includes(q)
-  );
-  renderFacilityTable(filtered);
-}
-function showFacilityDetail(id) {
-  const f = facilities.find(x=>x.id===id);
-  if(!f) return;
-  document.getElementById('modalTitle').textContent = f.name;
-  document.getElementById('modalSub').textContent = `${f.id} · ${f.loc}`;
-  document.getElementById('modalBody').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-      <div class="modal-field"><label>구매일</label><p>${f.bought}</p></div>
-      <div class="modal-field"><label>수리 횟수</label><p>${f.repairs}회</p></div>
-      <div class="modal-field"><label>현재 위험도</label><p style="color:${f.status==='high'?'var(--risk-high)':f.status==='mid'?'var(--risk-mid)':'var(--risk-low)'};font-size:24px;font-family:'Space Mono',monospace">${f.risk}%</p></div>
-      <div class="modal-field"><label>상태</label><p><span class="tag ${f.status}">${f.status==='high'?'위험':f.status==='mid'?'주의':'정상'}</span></p></div>
-    </div>
-    <div class="risk-bar-wrap" style="height:12px;margin-bottom:16px">
-      <div class="risk-bar" style="width:${f.risk}%;background:${f.status==='high'?'var(--risk-high)':f.status==='mid'?'var(--risk-mid)':'var(--risk-low)'}"></div>
-    </div>
-    <button class="submit-btn" style="font-size:14px;padding:12px" onclick="closeModal();showPage('report',document.querySelector('[onclick*=report]'));document.getElementById('facId').value='${f.id}';document.getElementById('facName').value='${f.name}'">📝 수리 요청 바로가기</button>
-  `;
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-
-// ── PREDICTIONS ──
-function renderPredictions(preds) {
-  document.getElementById('predGrid').innerHTML = preds.map(p => `
-    <div class="pred-card ${p.level}">
-      <div class="pred-item-name">${p.name}</div>
-      <div class="pred-location">📍 ${p.loc} · ${p.id}</div>
-      <div class="pred-score-row">
+  const topRisk = fs.sort((a,b)=>b.risk-a.risk).slice(0,5);
+  document.getElementById('topRiskList').innerHTML = topRisk.map(f=>{
+    const level = getRiskLevel(f.risk);
+    const color = level==='high' ? 'var(--red)' : level==='mid' ? 'var(--amber)' : 'var(--green)';
+    const badge = level==='high' ? 'b-red' : level==='mid' ? 'b-amber' : 'b-green';
+    return `
+      <div class="risk-row">
         <div>
-          <div class="pred-score ${p.level}">${p.score}<span style="font-size:20px">%</span></div>
-          <div class="pred-label">고장 위험도</div>
+          <div class="risk-name">${f.name}</div>
+          <div class="risk-sub">${f.id} · ${f.loc}</div>
         </div>
-        <div style="text-align:right">
-          <div class="tag ${p.level}" style="font-size:13px;padding:6px 12px">${p.level==='high'?'⚠️ 즉시 조치':p.level==='mid'?'🔶 주의 필요':'✅ 정상'}</div>
-        </div>
+        <div class="progress"><div style="width:${f.risk}%;background:${color}"></div></div>
+        <div style="text-align:right;font-family:'Space Mono',monospace;font-weight:800">${f.risk}%</div>
+        <div class="badge ${badge}">${statusLabel(level==='high'?'high':level==='mid'?'mid':'low')}</div>
       </div>
-      <div class="pred-bar-wrap">
-        <div class="pred-bar ${p.level}-bar" style="width:${p.score}%"></div>
+    `;
+  }).join('');
+
+  const recent = [...state.tickets].slice().sort((a,b)=>b.created.localeCompare(a.created)).slice(0,4);
+  document.getElementById('recentRepairs').innerHTML = recent.map(t=>`
+    <div class="repair-item" onclick="openTicketById('${t.id}')">
+      <div class="ava">${t.status==='수리완료'?'✅':t.status==='수리중'?'🔧':'📝'}</div>
+      <div>
+        <div class="repair-name">${t.name}</div>
+        <div class="repair-sub">${t.loc} · ${t.created}</div>
       </div>
-      <div class="pred-meta">
-        <div class="pred-meta-item">사용 기간 <span>${p.age}</span></div>
-        <div class="pred-meta-item">수리 이력 <span>${p.repairs}회</span></div>
-      </div>
-      <div class="pred-action">
-        <button class="alert-btn" onclick="sendAlert('${p.name}',${p.score})">🔔 행정실 알림 전송</button>
-      </div>
+      <div class="small-tag ${ticketClass(t.status)}">${t.status}</div>
+    </div>
+  `).join('');
+
+  const chart = document.getElementById('monthChart');
+  const max = Math.max(...state.monthlyData);
+  chart.innerHTML = state.monthlyData.map((v,i)=>`
+    <div class="bar-col">
+      <div class="bar" style="height:${(v/max)*100}%"></div>
+      <div class="bar-val">${v}</div>
+      <div class="bar-label">${['12월','1월','2월','3월','4월','5월'][i]}</div>
     </div>
   `).join('');
 }
-function sendAlert(name, score) {
-  showToast(`✅ ${name} (${score}%) 점검 알림이 행정실로 전송되었습니다.`);
+
+let facilityFilter = 'all';
+function renderFacilities(){
+  const q = document.getElementById('facilitySearch').value.trim().toLowerCase();
+  let list = state.facilities.map(f=>{
+    const risk = calcRisk(f);
+    return {...f, risk, level:getRiskLevel(risk)};
+  });
+  if(facilityFilter !== 'all'){
+    if(facilityFilter === 'repair') list = list.filter(f=>f.status === 'repair');
+    else if(facilityFilter === 'done') list = list.filter(f=>f.status === 'done');
+    else list = list.filter(f=>f.level === facilityFilter);
+  }
+  if(q){
+    list = list.filter(f =>
+      [f.name,f.id,f.loc,f.type,f.memo].join(' ').toLowerCase().includes(q)
+    );
+  }
+  document.getElementById('facilityBody').innerHTML = list.map(f=>{
+    const tag = f.status==='high' ? 'b-red' : f.status==='mid' ? 'b-amber' : f.status==='low' ? 'b-green' : 'b-slate';
+    return `
+      <tr>
+        <td><div class="fac-name">${f.name}</div><div class="fac-id">${f.id}</div></td>
+        <td>${f.type}</td>
+        <td>${f.loc}</td>
+        <td>${f.age.toFixed(1)}년</td>
+        <td>${f.repairs}회</td>
+        <td><span class="status-pill ${f.level==='high'?'p-check':f.level==='mid'?'p-check':'p-ok'}"><span class="status-dot"></span>${f.risk}%</span></td>
+        <td><span class="status-pill ${tag}">${statusLabel(f.status)}</span></td>
+        <td>
+          <div class="inline-actions">
+            <button class="mini-btn" onclick="openFacilityDetail('${f.id}')">상세</button>
+            <button class="mini-btn" onclick="prefillReport('${f.id}')">신고</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('') || `<tr><td colspan="8" style="text-align:center;color:#64748b;padding:24px">조건에 맞는 시설이 없습니다.</td></tr>`;
 }
 
-// ── REPORT ──
-function simulateQR() {
-  const random = facilities[Math.floor(Math.random()*facilities.length)];
-  document.getElementById('facId').value = random.id;
-  document.getElementById('facName').value = random.name;
-  document.getElementById('facLoc').value = random.loc;
-  showToast(`QR 스캔 완료: ${random.name} (${random.id})`);
+function renderPredictions(){
+  const list = [...state.facilities]
+    .map(f=>({ ...f, risk: calcRisk(f), level: getRiskLevel(calcRisk(f)) }))
+    .sort((a,b)=>b.risk-a.risk)
+    .slice(0,8);
+  document.getElementById('predGrid').innerHTML = list.map(f=>{
+    const levelText = f.level==='high' ? '즉시 조치' : f.level==='mid' ? '주의 필요' : '정상';
+    const barColor = f.level==='high' ? 'var(--red)' : f.level==='mid' ? 'var(--amber)' : 'var(--green)';
+    return `
+      <div class="pred-card ${f.level}">
+        <div class="pred-top">
+          <div>
+            <div class="pred-name">${f.name}</div>
+            <div class="pred-loc">${f.id} · ${f.loc} · ${f.type}</div>
+          </div>
+          <span class="badge ${f.level==='high'?'b-red':f.level==='mid'?'b-amber':'b-green'}">${levelText}</span>
+        </div>
+        <div class="score-box">
+          <div>
+            <div class="score ${f.level}">${f.risk}<span class="score-unit">%</span></div>
+            <div style="color:#64748b;font-size:12px;margin-top:6px">고장 위험도</div>
+          </div>
+          <div style="flex:1"></div>
+        </div>
+        <div class="progress" style="margin-top:12px"><div style="width:${f.risk}%;background:${barColor}"></div></div>
+        <div class="pred-meta">
+          <span>사용연수 <strong>${f.age.toFixed(1)}년</strong></span>
+          <span>수리횟수 <strong>${f.repairs}회</strong></span>
+          <span>예상수명 <strong>${expectedLifeByType(f.type)}년</strong></span>
+        </div>
+        <div class="pred-footer">
+          <div class="notes">비슷한 사용연수와 수리횟수는 비슷한 점수로 계산됩니다.</div>
+          <button class="alert-btn" onclick="sendAlert('${f.id}')">행정실 알림 전송</button>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
-function submitReport() {
-  const id = document.getElementById('facId').value;
-  const name = document.getElementById('facName').value;
+
+function renderBudget(){
+  const completed = state.tickets.filter(t=>t.status === '수리완료');
+  const repairing = state.tickets.filter(t=>t.status === '수리중');
+  const waiting = state.tickets.filter(t=>t.status === '접수');
+  const completedSum = completed.reduce((a,b)=>a + (b.actual || b.estimate),0);
+  const repairingSum = repairing.reduce((a,b)=>a + b.estimate,0);
+  const waitingSum = waiting.reduce((a,b)=>a + b.estimate,0);
+  const spent = completedSum;
+  const reserved = repairingSum + waitingSum;
+  const remain = clamp(state.totalBudget - spent - reserved, 0, state.totalBudget);
+  const spentPct = spent / state.totalBudget * 100;
+  const remainPct = remain / state.totalBudget * 100;
+
+  document.getElementById('budgetSpent').textContent = money(spent);
+  document.getElementById('budgetRemain').textContent = money(remain);
+  document.getElementById('budgetSpentBar').style.width = `${clamp(spentPct,0,100)}%`;
+  document.getElementById('budgetRemainBar').style.width = `${clamp(remainPct,0,100)}%`;
+
+  document.getElementById('budgetTable').innerHTML = `
+    <tr>
+      <td>수리완료</td>
+      <td>${completed.length}건</td>
+      <td>${money(completedSum)}</td>
+      <td>실집행액</td>
+    </tr>
+    <tr>
+      <td>수리중</td>
+      <td>${repairing.length}건</td>
+      <td>${money(repairingSum)}</td>
+      <td>예상 집행액</td>
+    </tr>
+    <tr>
+      <td>접수</td>
+      <td>${waiting.length}건</td>
+      <td>${money(waitingSum)}</td>
+      <td>대기 예산</td>
+    </tr>
+    <tr>
+      <td>잔여 예산</td>
+      <td>-</td>
+      <td>${money(remain)}</td>
+      <td>총 예산 - 집행 - 대기</td>
+    </tr>
+  `;
+
+  const total = completedSum + repairingSum + waitingSum || 1;
+  const spentDeg = completedSum / total * 360;
+  const pendDeg = repairingSum / total * 360;
+  const remDeg = 360 - spentDeg - pendDeg;
+
+  const r = 62, circ = 2 * Math.PI * r;
+  const spentLen = circ * (completedSum / total);
+  const pendLen = circ * (repairingSum / total);
+  const remLen = circ * (remain / state.totalBudget);
+
+  document.getElementById('donutSpent').style.strokeDasharray = `${spentLen} ${circ-spentLen}`;
+  document.getElementById('donutSpent').style.strokeDashoffset = '0';
+  document.getElementById('donutPending').style.strokeDasharray = `${pendLen} ${circ-pendLen}`;
+  document.getElementById('donutPending').style.strokeDashoffset = `-${spentLen}`;
+  document.getElementById('donutRemain').style.strokeDasharray = `${remLen} ${circ-remLen}`;
+  document.getElementById('donutRemain').style.strokeDashoffset = `-${spentLen+pendLen}`;
+  document.getElementById('donutCenter').textContent = money(remain);
+
+  document.getElementById('budgetLegend').innerHTML = `
+    <div class="legend"><div class="legend-left"><span class="legend-dot" style="background:var(--blue)"></span><div><strong>수리완료</strong><small>${completed.length}건 · ${money(completedSum)}</small></div></div><strong>${Math.round(completedSum/total*100)}%</strong></div>
+    <div class="legend"><div class="legend-left"><span class="legend-dot" style="background:var(--amber)"></span><div><strong>수리중/접수</strong><small>${repairing.length + waiting.length}건 · ${money(repairingSum + waitingSum)}</small></div></div><strong>${Math.round((repairingSum+waitingSum)/total*100)}%</strong></div>
+    <div class="legend"><div class="legend-left"><span class="legend-dot" style="background:var(--green)"></span><div><strong>잔여 예산</strong><small>${money(remain)}</small></div></div><strong>${Math.round(remain/state.totalBudget*100)}%</strong></div>
+  `;
+}
+
+function renderAnalytics(){
+  const months = ['12월','1월','2월','3월','4월','5월'];
+  const data = state.monthlyData;
+  const max = Math.max(...data);
+  document.getElementById('bigChart').innerHTML = data.map((v,i)=>`
+    <div class="big-bar-col">
+      <div class="big-bar" style="height:${(v/max)*100}%"></div>
+      <div class="bar-val" style="font-size:13px">${v}</div>
+      <div class="bar-label">${months[i]}</div>
+    </div>
+  `).join('');
+  document.getElementById('bigChartAxis').innerHTML = months.map(m=>`<span>${m}</span>`).join('');
+
+  const stats = [
+    ['총 시설 수', state.facilities.length + '개'],
+    ['위험 시설', state.facilities.filter(f=>calcRisk(f)>=80).length + '개'],
+    ['수리중', state.tickets.filter(t=>t.status==='수리중').length + '건'],
+    ['수리완료', state.tickets.filter(t=>t.status==='수리완료').length + '건'],
+    ['평균 위험도', Math.round(state.facilities.reduce((a,b)=>a+calcRisk(b),0)/state.facilities.length) + '%']
+  ];
+  document.getElementById('analyticsStats').innerHTML = stats.map(s=>`
+    <div class="stat-row"><span>${s[0]}</span><strong>${s[1]}</strong></div>
+  `).join('');
+
+  const counts = [state.tickets.filter(t=>t.status==='수리완료').length, state.tickets.filter(t=>t.status==='수리중').length, state.tickets.filter(t=>t.status==='접수').length];
+  const grid = document.getElementById('lineGrid');
+  grid.innerHTML = '';
+  for(let i=0;i<5;i++){
+    const y = 40 + i*40;
+    grid.innerHTML += `<line x1="0" y1="${y}" x2="400" y2="${y}" stroke="#eef2f7" stroke-width="1"/>`;
+  }
+  const pts = [
+    [20, 220 - counts[0]*28],
+    [120, 220 - counts[1]*28],
+    [220, 220 - counts[2]*28],
+    [320, 220 - (counts[0]+counts[1])*12],
+    [380, 220 - (counts[1]+counts[2])*10]
+  ];
+  const d = 'M ' + pts.map(p=>p.join(' ')).join(' L ');
+  const area = d + ` L 380 230 L 20 230 Z`;
+  document.getElementById('linePath').setAttribute('d', d);
+  document.getElementById('areaPath').setAttribute('d', area);
+  document.getElementById('points').innerHTML = pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#3b5bfa"/>`).join('');
+}
+
+function renderRewards(){
+  const p = state.points;
+  const current = [...state.rewards].filter(r => p >= r.threshold).slice(-1)[0] || state.rewards[0];
+  const next = state.rewards.find(r => r.threshold > p) || null;
+  document.getElementById('pointValue').textContent = p.toLocaleString('ko-KR');
+  document.getElementById('pointRank').textContent = next ? `${current.name} 단계 · 다음 ${next.name}` : `${current.name} 최고 단계`;
+  const max = next ? next.threshold : state.rewards[state.rewards.length-1].threshold;
+  const min = current.threshold;
+  const progress = next ? ((p-min)/(next.threshold-min))*100 : 100;
+  document.getElementById('pointBar').style.width = `${clamp(progress,0,100)}%`;
+  document.getElementById('rewardList').innerHTML = state.rewards.map(r=>`
+    <div class="stat-row">
+      <span>${r.name} (≥ ${r.threshold.toLocaleString('ko-KR')}점)</span>
+      <strong>${p >= r.threshold ? '획득' : '미달'}</strong>
+    </div>
+  `).join('');
+}
+
+function renderAssistant(){
+  if(state.chat.length === 0){
+    state.chat = [
+      {who:'bot', text:'안녕하세요. SFE 도움봇입니다. QR 신고, 사진 분석, 예산, 시설 등록, 포인트 보상까지 바로 안내할 수 있습니다.'}
+    ];
+  }
+  document.getElementById('chatMessages').innerHTML = state.chat.map(m=>`
+    <div class="bubble ${m.who === 'me' ? 'me' : 'bot'}">${escapeHtml(m.text)}</div>
+  `).join('');
+  const box = document.getElementById('chatMessages');
+  box.scrollTop = box.scrollHeight;
+}
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+}
+
+function renderReportPreview(){
+  const id = document.getElementById('repId')?.value?.trim() || '-';
+  const name = document.getElementById('repName')?.value?.trim() || '-';
+  const loc = document.getElementById('repLoc')?.value?.trim() || '-';
+  const type = document.getElementById('faultType')?.value || '-';
+  const score = state.selectedFile ? Math.min(100, 60 + (document.getElementById('faultDesc').value.length > 20 ? 20 : 10)) : 0;
+  document.getElementById('previewId').textContent = id;
+  document.getElementById('previewName').textContent = name;
+  document.getElementById('previewLoc').textContent = loc;
+  document.getElementById('previewType').textContent = type;
+  document.getElementById('previewScore').textContent = score + '점';
+}
+
+function analyzeText(text, fileName){
+  const combined = (text + ' ' + fileName).toLowerCase();
+  const rules = [
+    {keys:['전원','꺼짐','전기','코드','콘센트','깜빡'], type:'전기적 오류', msg:'전원 계통 또는 배선 접촉 문제 가능성이 높습니다.', rec:'차단기, 전원선, 접점 상태를 우선 확인하세요.'},
+    {keys:['깨짐','금','파손','부서','깨졌','헐거','걸림','문'], type:'기계적 파손', msg:'부품 마모 또는 구조적 파손이 의심됩니다.', rec:'경첩, 레일, 고정 볼트를 점검하세요.'},
+    {keys:['물','누수','수도','배관','젖'], type:'배관 문제', msg:'누수 또는 밸브 손상 가능성이 있습니다.', rec:'밸브와 패킹을 확인하고 주변 전원을 차단하세요.'},
+    {keys:['과열','뜨거','냄새','연기'], type:'과열/노후화', msg:'과열로 인한 부품 손상 가능성이 있습니다.', rec:'장비 전원 차단 후 냉각과 내부 먼지 제거가 필요합니다.'},
+    {keys:['소리','잡음','울림','삐익'], type:'음향/모터 이상', msg:'모터 또는 내부 팬의 이상 소음으로 보입니다.', rec:'팬, 베어링, 내부 이물질 여부를 점검하세요.'}
+  ];
+  const rule = rules.find(r => r.keys.some(k=>combined.includes(k))) || {
+    type:'기타',
+    msg:'사진과 신고 내용을 바탕으로 기본 점검이 필요한 상태입니다.',
+    rec:'현장 확인 후 세부 부품 상태를 점검하세요.'
+  };
+  return rule;
+}
+
+function updatePreviewFromInputs(){
+  const desc = document.getElementById('faultDesc').value;
   const type = document.getElementById('faultType').value;
-  if(!id || !name || !type) { showToast('⚠️ 필수 항목을 모두 입력해주세요.'); return; }
-  showToast(`✅ 수리 요청이 접수되었습니다! (${name})`);
-  setTimeout(() => {
-    document.getElementById('facId').value='';
-    document.getElementById('facName').value='';
-    document.getElementById('facLoc').value='';
-    document.getElementById('faultType').value='';
-    document.getElementById('faultDesc').value='';
-  }, 500);
+  const name = document.getElementById('repName').value;
+  const id = document.getElementById('repId').value;
+  const loc = document.getElementById('repLoc').value;
+  document.getElementById('previewName').textContent = name || '-';
+  document.getElementById('previewId').textContent = id || '-';
+  document.getElementById('previewLoc').textContent = loc || '-';
+  document.getElementById('previewType').textContent = type || '-';
+  if(desc || name || id || loc) {
+    const rule = analyzeText(desc, [name,id,loc].join(' '));
+    document.getElementById('analysisText').textContent = `분석 요약: ${rule.msg} 추천 조치: ${rule.rec}`;
+  }
 }
 
-// ── TOAST ──
-function showToast(msg) {
-  const t = document.getElementById('toast');
+function setReportMode(mode){
+  state.selectedReportMode = mode;
+  document.querySelectorAll('.tab[data-report-tab]').forEach(t=>t.classList.toggle('active', t.dataset.reportTab===mode));
+  document.getElementById('qrArea').classList.toggle('hidden', mode !== 'qr');
+  document.getElementById('cameraArea').classList.toggle('hidden', mode !== 'camera');
+  document.getElementById('manualArea').classList.toggle('hidden', mode !== 'manual');
+}
+
+function simulateQR(){
+  const pick = state.facilities[Math.floor(Math.random()*state.facilities.length)];
+  fillReportForm(pick.id);
+  showToast(`QR 인식 완료: ${pick.name}`);
+  setReportMode('manual');
+}
+function openCameraMock(){
+  const overlay = document.getElementById('scanOverlay');
+  overlay.classList.add('open');
+  let progress = 0;
+  const timer = setInterval(()=>{
+    progress += 12;
+    document.getElementById('scanProgress').style.width = progress + '%';
+    if(progress >= 100){
+      clearInterval(timer);
+      const pick = state.facilities
+        .slice()
+        .sort((a,b)=>calcRisk(b)-calcRisk(a))[0];
+      fillReportForm(pick.id);
+      closeScan();
+      setReportMode('manual');
+      showToast(`카메라 인식 완료: ${pick.name}`);
+    }
+  }, 220);
+}
+function closeScan(){ document.getElementById('scanOverlay').classList.remove('open'); }
+
+function fillReportForm(id){
+  const f = state.facilities.find(x=>x.id===id);
+  if(!f) return;
+  document.getElementById('repId').value = f.id;
+  document.getElementById('repName').value = f.name;
+  document.getElementById('repLoc').value = f.loc;
+  document.getElementById('faultDesc').value = f.memo || '';
+  document.getElementById('faultType').value = inferFaultType(f);
+  document.getElementById('previewName').textContent = f.name;
+  document.getElementById('previewId').textContent = f.id;
+  document.getElementById('previewLoc').textContent = f.loc;
+  document.getElementById('previewType').textContent = document.getElementById('faultType').value;
+  document.getElementById('previewScore').textContent = (60 + Math.round(calcRisk(f)/2)) + '점';
+  updatePreviewFromInputs();
+}
+function prefillReport(id){
+  showPage('report');
+  fillReportForm(id);
+  setReportMode('manual');
+  showToast('선택 시설이 신고 양식에 입력되었습니다.');
+}
+function inferFaultType(f){
+  if (['영상장비'].includes(f.type)) return '전기적 오류';
+  if (['주방기기','배관'].includes(f.type)) return '노후화';
+  if (['실험기구','가구','체육장비'].includes(f.type)) return '기계적 파손';
+  return '기타';
+}
+
+function buildAnalysisFromReport(){
+  const desc = document.getElementById('faultDesc').value.trim();
+  const name = document.getElementById('repName').value.trim();
+  const id = document.getElementById('repId').value.trim();
+  const loc = document.getElementById('repLoc').value.trim();
+  const type = document.getElementById('faultType').value.trim();
+  const combined = `${desc} ${name} ${id} ${loc} ${type}`;
+  const rule = analyzeText(combined, state.selectedFile ? state.selectedFile.name : '');
+  const severity = Math.min(100, Math.max(12, Math.round((desc.length + combined.length/5)/4)));
+  return {
+    type: rule.type,
+    summary: rule.msg,
+    recommendation: rule.rec,
+    score: severity
+  };
+}
+
+function updatePreview(){
+  updatePreviewFromInputs();
+  const ai = buildAnalysisFromReport();
+  document.getElementById('analysisText').textContent = `${ai.summary} 추천 조치: ${ai.recommendation}`;
+  const rec = [
+    {t:'우선 조치', d: ai.type},
+    {t:'AI 판단', d:`위험 신호 ${ai.score}점`},
+    {t:'추천 작업', d: ai.recommendation}
+  ];
+  document.getElementById('recommendList').innerHTML = rec.map(r=>`
+    <div class="rec-item"><div><strong>${r.t}</strong><span>${r.d}</span></div><span>→</span></div>
+  `).join('');
+}
+
+function submitReport(){
+  const id = document.getElementById('repId').value.trim();
+  const name = document.getElementById('repName').value.trim();
+  const loc = document.getElementById('repLoc').value.trim();
+  const type = document.getElementById('faultType').value;
+  const desc = document.getElementById('faultDesc').value.trim();
+  if(!id || !name || !type || !desc){
+    showToast('필수 항목을 모두 입력해주세요.');
+    return;
+  }
+  const analysis = buildAnalysisFromReport();
+  const fac = state.facilities.find(f=>f.id===id);
+  const status = analysis.score >= 70 ? '수리중' : '접수';
+  const ticketId = `T-${Math.floor(1000 + Math.random()*9000)}`;
+  const estimate = estimateCost(fac, analysis.score);
+  state.tickets.unshift({
+    id: ticketId,
+    facId: id,
+    name,
+    loc,
+    status,
+    type,
+    desc,
+    analysis: `${analysis.summary} ${analysis.recommendation}`,
+    points: rewardPoints(id, name, desc, !!state.selectedFile, status),
+    estimate,
+    actual: 0,
+    source: state.selectedReportMode === 'qr' ? 'QR' : state.selectedReportMode === 'camera' ? '카메라' : '직접',
+    created: new Date().toISOString().slice(0,16).replace('T',' ')
+  });
+  if(fac && status === '수리중'){
+    fac.status = 'repair';
+    fac.repairs += 1;
+  }else if(fac){
+    fac.repairs += 1;
+  }
+  state.points += state.tickets[0].points;
+  showToast(`접수 완료! +${state.tickets[0].points}점 지급`);
+  clearReportForm(false);
+  renderAll();
+  showPage('dashboard');
+}
+
+function rewardPoints(id,name,desc,hasPhoto,status){
+  let base = 70;
+  if(id) base += 15;
+  if(name) base += 10;
+  if(desc.length > 30) base += 20;
+  if(hasPhoto) base += 30;
+  if(status === '수리중') base += 40;
+  return Math.min(base, 250);
+}
+
+function estimateCost(f, score){
+  const age = f ? getAgeYears(f) : 4;
+  const factor = f ? expectedLifeByType(f.type) : 8;
+  const base = f ? (120000 + f.repairs * 22000 + age * 25000 + score * 1400) : 120000;
+  return Math.round(base / 1000) * 1000;
+}
+
+function clearReportForm(clearPreview=true){
+  ['repId','repName','repLoc','faultDesc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('faultType').value='';
+  state.selectedFile = null;
+  document.getElementById('photoInput').value='';
+  document.getElementById('photoPreview').style.display = 'none';
+  if(clearPreview){
+    document.getElementById('analysisText').textContent = '아직 분석된 내용이 없습니다. 사진을 올리거나 신고 내용을 입력하면 자동으로 요약됩니다.';
+    document.getElementById('recommendList').innerHTML = '';
+  }
+  updatePreviewFromInputs();
+}
+
+function renderReportPreview(){
+  updatePreview();
+}
+
+function openFacilityDetail(id){
+  const f = state.facilities.find(x=>x.id===id);
+  if(!f) return;
+  const risk = calcRisk(f);
+  const ticket = state.tickets.find(t=>t.facId===id) || null;
+  document.getElementById('ticketTitle').textContent = f.name;
+  document.getElementById('ticketSub').textContent = `${f.id} · ${f.loc}`;
+  document.getElementById('ticketBody').innerHTML = `
+    <div class="mfield"><span>종류</span><strong>${f.type}</strong></div>
+    <div class="mfield"><span>상태</span><strong>${statusLabel(f.status)}</strong></div>
+    <div class="mfield"><span>사용연수</span><strong>${f.age.toFixed(1)}년</strong></div>
+    <div class="mfield"><span>수리횟수</span><strong>${f.repairs}회</strong></div>
+    <div class="mfield"><span>위험도</span><strong>${risk}%</strong></div>
+    <div class="mfield"><span>메모</span><strong>${f.memo || '-'}</strong></div>
+    <div class="mfield"><span>최근 신고 상태</span><strong>${ticket ? ticket.status : '없음'}</strong></div>
+    <div class="mfield"><span>최근 신고 접수</span><strong>${ticket ? ticket.created : '-'}</strong></div>
+  `;
+  state.selectedTicketId = ticket ? ticket.id : null;
+  document.getElementById('ticketOverlay').classList.add('open');
+}
+function openTicketById(id){
+  const t = state.tickets.find(x=>x.id===id);
+  if(!t) return;
+  state.selectedTicketId = id;
+  document.getElementById('ticketTitle').textContent = `${t.name} 신고 상세`;
+  document.getElementById('ticketSub').textContent = `${t.id} · ${t.loc}`;
+  document.getElementById('ticketBody').innerHTML = `
+    <div class="mfield"><span>접수 경로</span><strong>${t.source}</strong></div>
+    <div class="mfield"><span>현재 상태</span><strong>${t.status}</strong></div>
+    <div class="mfield"><span>고장 유형</span><strong>${t.type}</strong></div>
+    <div class="mfield"><span>예상 금액</span><strong>${money(t.estimate)}</strong></div>
+    <div class="mfield"><span>기여 점수</span><strong>${t.points}점</strong></div>
+    <div class="mfield"><span>신고 시간</span><strong>${t.created}</strong></div>
+    <div class="mfield" style="grid-column:1/-1"><span>상세 내용</span><strong>${t.desc || '-'}</strong></div>
+    <div class="mfield" style="grid-column:1/-1"><span>AI 분석</span><strong>${t.analysis || '-'}</strong></div>
+  `;
+  document.getElementById('ticketOverlay').classList.add('open');
+}
+function closeTicket(){ document.getElementById('ticketOverlay').classList.remove('open'); }
+function setTicketStatus(status){
+  const t = state.tickets.find(x=>x.id===state.selectedTicketId);
+  if(!t){ showToast('선택된 신고가 없습니다.'); return; }
+  t.status = status;
+  const f = state.facilities.find(x=>x.id===t.facId);
+  if(f){
+    if(status === '수리중') f.status = 'repair';
+    if(status === '수리완료') f.status = 'done';
+    if(status === '접수' && f.status !== 'done') f.status = calcRisk(f) >= 80 ? 'high' : calcRisk(f) >= 60 ? 'mid' : 'low';
+  }
+  if(status === '수리완료' && !t.actual) t.actual = Math.round(t.estimate * 0.98);
+  showToast(`상태 변경: ${status}`);
+  closeTicket();
+  renderAll();
+}
+
+function openAuth(mode){
+  state.authMode = mode;
+  document.getElementById('authOverlay').classList.add('open');
+  document.getElementById('tabLogin').classList.toggle('active', mode==='login');
+  document.getElementById('tabSignup').classList.toggle('active', mode==='signup');
+  document.getElementById('authTitle').textContent = mode === 'login' ? '로그인' : '회원가입';
+  document.getElementById('authDesc').textContent = mode === 'login'
+    ? '테스트용 로그인 화면입니다. 실제 인증 대신 즉시 확인용으로 동작합니다.'
+    : '회원가입 화면입니다. 입력값을 확인하고 바로 완료 처리합니다.';
+  document.getElementById('signupExtra').classList.toggle('hidden', mode !== 'signup');
+}
+function closeAuth(){ document.getElementById('authOverlay').classList.remove('open'); }
+function submitAuth(){
+  const id = document.getElementById('authId').value.trim();
+  const pw = document.getElementById('authPw').value.trim();
+  if(!id || !pw){
+    showToast('아이디와 비밀번호를 입력해주세요.');
+    return;
+  }
+  if(state.authMode === 'signup'){
+    const name = document.getElementById('authName').value.trim();
+    if(!name){ showToast('이름도 입력해주세요.'); return; }
+    showToast(`회원가입 완료: ${name}`);
+  } else {
+    showToast('로그인 완료');
+  }
+  closeAuth();
+}
+
+function openFacilityForm(){
+  document.getElementById('newType').innerHTML = state.typeMap.map(t=>`<option value="${t}">${t}</option>`).join('');
+  document.getElementById('facilityOverlay').classList.add('open');
+}
+function closeFacilityForm(){ document.getElementById('facilityOverlay').classList.remove('open'); }
+function registerFacility(){
+  const name = document.getElementById('newName').value.trim();
+  const id = document.getElementById('newId').value.trim();
+  const type = document.getElementById('newType').value;
+  const loc = document.getElementById('newLoc').value.trim();
+  const bought = document.getElementById('newBought').value;
+  const age = parseFloat(document.getElementById('newAge').value || '0');
+  const repairs = parseInt(document.getElementById('newRepairs').value || '0',10);
+  const status = document.getElementById('newStatus').value;
+  const memo = document.getElementById('newMemo').value.trim();
+  if(!name || !id || !type || !loc || !bought){
+    showToast('필수 정보를 모두 입력해주세요.');
+    return;
+  }
+  if(state.facilities.some(f=>f.id === id)){
+    showToast('같은 ID가 이미 있습니다.');
+    return;
+  }
+  state.facilities.unshift({
+    id, name, type, loc, bought,
+    age: age || Math.max(0.5, (daysSince(bought)/365)),
+    repairs,
+    status,
+    memo: memo || '신규 등록'
+  });
+  showToast('시설물 등록 완료');
+  closeFacilityForm();
+  renderAll();
+  showPage('facilities');
+}
+
+function exportMonthChart(){
+  const rows = [['month','requests'], ...state.monthlyData.map((v,i)=>[['12월','1월','2월','3월','4월','5월'][i], v])];
+  const csv = rows.map(r=>r.join(',')).join('\\n');
+  downloadText(csv, 'sfe_month_requests.csv', 'text/csv;charset=utf-8');
+}
+
+function downloadText(text, filename, mime){
+  const blob = new Blob([text], {type:mime});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+
+function sendAlert(id){
+  const f = state.facilities.find(x=>x.id===id);
+  showToast(`${f ? f.name : id} 점검 알림을 전송했습니다.`);
+}
+
+function showToast(msg){
+  const el = document.getElementById('toast');
   document.getElementById('toastMsg').textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  el.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
 }
 
-// Click outside modal to close
-document.getElementById('modal').addEventListener('click', e => {
-  if(e.target===e.currentTarget) closeModal();
+function openHelp(content){
+  document.getElementById('helpBody').innerHTML = content || '<p style="color:#64748b;line-height:1.8">도움말이 없습니다.</p>';
+  document.getElementById('helpOverlay').classList.add('open');
+}
+function closeHelp(){ document.getElementById('helpOverlay').classList.remove('open'); }
+
+function sendChat(){
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  state.chat.push({who:'me', text:msg});
+  input.value = '';
+  renderAssistant();
+  setTimeout(()=>{
+    const reply = autoReply(msg);
+    state.chat.push({who:'bot', text:reply});
+    renderAssistant();
+  }, 350);
+}
+function autoReply(msg){
+  const t = msg.toLowerCase();
+  if (t.includes('qr') || t.includes('스캔')) return 'QR 신고는 QR 스캔 버튼을 누르면 자동 입력됩니다. 시설물 ID와 위치가 채워진 뒤 바로 사진과 함께 접수할 수 있습니다.';
+  if (t.includes('카메라') || t.includes('촬영')) return '카메라 모의 기능은 촬영 시뮬레이션을 실행한 뒤 가장 가까운 시설을 자동으로 찾아줍니다.';
+  if (t.includes('사진') || t.includes('ai 분석') || t.includes('분석')) return '사진을 첨부하면 AI가 텍스트와 파일 정보를 함께 해석해 고장 유형과 추천 조치를 정리합니다.';
+  if (t.includes('예산') || t.includes('비용') || t.includes('잔여')) return '예산 화면에서는 수리완료의 실집행액, 수리중/접수의 예상 집행액, 잔여 예산을 분리해서 계산합니다.';
+  if (t.includes('등록') || t.includes('시설')) return '시설물 등록은 시설명, ID, 종류, 위치, 구매일, 상태를 입력하면 즉시 목록에 추가됩니다.';
+  if (t.includes('포인트') || t.includes('보상') || t.includes('점수')) return '신고가 정확하고 첨부 자료가 많을수록 기여점수가 높아집니다. 점수 구간에 따라 보상 단계가 올라갑니다.';
+  if (t.includes('완료') || t.includes('수리완료')) return '수리완료 상태는 신고 상세와 시설물 현황, 대시보드 최근 처리 현황에서 같은 상태값으로 유지됩니다.';
+  return '질문해주신 내용은 SFE 안에서 처리 가능합니다. QR 신고, 카메라 모의, 사진 분석, 예산 계산, 시설 등록 중 어떤 항목인지 조금 더 구체적으로 적어주시면 바로 안내합니다.';
+}
+
+function estimatePhotoPreview(file){
+  const url = URL.createObjectURL(file);
+  const preview = document.getElementById('photoPreview');
+  preview.style.display = 'block';
+  preview.innerHTML = `<img src="${url}" alt="preview">`;
+  return url;
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  // nav
+  document.querySelectorAll('.nav-item[data-page]').forEach(item=>{
+    item.addEventListener('click', ()=> showPage(item.dataset.page));
+  });
+
+  // report tabs
+  document.querySelectorAll('.tab[data-report-tab]').forEach(t=>{
+    t.addEventListener('click', ()=>{
+      setReportMode(t.dataset.reportTab);
+    });
+  });
+
+  // filters
+  document.getElementById('statusFilters').addEventListener('click', e=>{
+    const btn = e.target.closest('.chip-btn');
+    if(!btn) return;
+    document.querySelectorAll('.chip-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    facilityFilter = btn.dataset.filter;
+    renderFacilities();
+  });
+
+  // form bindings
+  ['repId','repName','repLoc','faultDesc','faultType'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.addEventListener('input', ()=>{ updatePreview(); renderFacilities(); });
+    el.addEventListener('change', ()=>{ updatePreview(); });
+  });
+
+  document.getElementById('photoInput').addEventListener('change', e=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    state.selectedFile = file;
+    estimatePhotoPreview(file);
+    const baseText = `${document.getElementById('faultDesc').value} ${file.name}`;
+    const rule = analyzeText(baseText, file.name);
+    document.getElementById('analysisText').textContent = `사진 분석 완료: ${rule.msg} 추천 조치: ${rule.rec}`;
+    document.getElementById('recommendList').innerHTML = `
+      <div class="rec-item"><div><strong>AI 판독</strong><span>${rule.type}</span></div><span>→</span></div>
+      <div class="rec-item"><div><strong>추천 조치</strong><span>${rule.rec}</span></div><span>→</span></div>
+      <div class="rec-item"><div><strong>보완 안내</strong><span>현장 사진과 텍스트가 함께 저장됩니다.</span></div><span>→</span></div>
+    `;
+    updatePreview();
+    showToast('사진 첨부 및 AI 분석이 완료되었습니다.');
+  });
+
+  document.getElementById('chatInput').addEventListener('input', ()=>{});
+  document.getElementById('chatMessages').addEventListener('click', ()=>{});
+
+  // modal close
+  ['authOverlay','facilityOverlay','ticketOverlay','scanOverlay','helpOverlay'].forEach(id=>{
+    document.getElementById(id).addEventListener('click', e=>{
+      if(e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+    });
+  });
+
+  // misc form defaults
+  document.getElementById('newType').innerHTML = state.typeMap.map(t=>`<option value="${t}">${t}</option>`).join('');
+  document.getElementById('newBought').value = new Date().toISOString().slice(0,10);
+  document.getElementById('newAge').value = '3';
+  updatePreview();
+  renderAll();
 });
+
+function closeHelp(){ document.getElementById('helpOverlay').classList.remove('open'); }
+function openHelpText(topic){
+  const map = {
+    export: '<p style="line-height:1.8;color:#64748b">내보내기는 현재 보이는 표나 차트 데이터를 CSV 파일로 저장하는 기능입니다. 기기에서 바로 열 수 있게 작성했습니다.</p>',
+    login: '<p style="line-height:1.8;color:#64748b">로그인/회원가입은 UI 시연용입니다. 입력 후 즉시 완료 상태로 바뀝니다.</p>',
+    points: '<p style="line-height:1.8;color:#64748b">신고가 정확하고 사진이 첨부되면 점수가 더 높아집니다. 점수가 높을수록 더 높은 보상 단계가 열립니다.</p>'
+  };
+  openHelp(map[topic] || '<p style="line-height:1.8;color:#64748b">도움말이 없습니다.</p>');
+}
 </script>
 </body>
 </html>
